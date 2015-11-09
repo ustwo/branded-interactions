@@ -22,9 +22,7 @@ slow =
 easy = 
 	time: 2
 	curve: "ease-in-out"
-	
-goEasy = ->
-	Framer.Defaults.Animation = easy
+
 	
 # the main toggle...
 Framer.Defaults.Animation = snappy
@@ -196,10 +194,8 @@ page.on "change:currentPage", ->
 		Framer.Defaults.Animation = slow
 	else if page.currentPage is pageThree
 # 		print "page three"
-# 		Framer.Defaults.Animation = easy
-		goEasy()
-	else # page one or other
-# 		print "page one"
+		Framer.Defaults.Animation = easy
+	else
 		Framer.Defaults.Animation = snappy
 
 
