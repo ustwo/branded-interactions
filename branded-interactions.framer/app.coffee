@@ -105,7 +105,10 @@ opacityConstraints = interactions[3]
 opacityConstraints.name = "opacity"
 opacityConstraints.html = opacityConstraints.name
 
+interactionsTargets = []
 
+# Center layers
+canvas.center()
 # –––––––––––––––––––––––––––––––––––––––
 # scale
 scaleTarget = new Layer
@@ -116,10 +119,7 @@ scaleTarget = new Layer
 	superLayer: scaleConstraints
 scaleTarget.states.add
 	last: scale: 0.95, borderRadius: 12
-# scaleTarget.states.animationOptions = snappy
-# 
-# Center layers
-canvas.center()
+interactionsTargets.push(scaleTarget)
 
 scaleTarget.on Events.Click, ->
 	this.states.next()
@@ -135,6 +135,7 @@ rotateTarget = new Layer
 	superLayer: rotateConstraints
 rotateTarget.states.add
 	last: rotation: 90, borderRadius: 12
+interactionsTargets.push(rotateTarget)
 
 rotateTarget.on Events.Click, ->
 	this.states.next()
@@ -150,7 +151,8 @@ positionTarget = new Layer
 positionTarget.states.add
 	first: x: positionTarget.x - boundsSize.width/4
 	last: x: positionTarget.x + boundsSize.width/4
-	
+interactionsTargets.push(positionTarget)
+
 positionTarget.on Events.Click, ->
 	this.states.next()
 
@@ -174,6 +176,7 @@ opacityTarget = new Layer
 	superLayer: opacityConstraints
 opacityTarget.states.add
 	last: opacity: 0
+interactionsTargets.push(opacityTarget)
 	
 opacityTarget.on Events.Click, ->
 	this.states.next()
@@ -181,21 +184,29 @@ opacityTarget.on Events.Click, ->
 	
 # –––––––––––––––––––––––––––––––––––––––
 # page changes
+
 page.on "change:currentPage", ->
 	# reset states
 	scaleTarget.states.switch("default")
-	rotateTarget.states.switch("default")
+# 	rotateTarget.states.switch("default")
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
 	
 	# change animation values
 	if page.currentPage is pageTwo
 # 		print "page two"
-		Framer.Defaults.Animation = slow
+		for i in interactionsTargets
+			i.states.animationOptions = slow
+		
 	else if page.currentPage is pageThree
 # 		print "page three"
-		Framer.Defaults.Animation = easy
+# 		Framer.Defaults.Animation = easy
+		for i in interactionsTargets
+			i.states.animationOptions = easy
+		
 	else
-		Framer.Defaults.Animation = snappy
+# 		Framer.Defaults.Animation = snappy
+		for i in interactionsTargets
+			i.states.animationOptions = snappy
 
 
