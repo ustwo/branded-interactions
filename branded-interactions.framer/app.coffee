@@ -1,3 +1,6 @@
+# –––––––––––––––––––––––––––––––––––––––
+# setup
+
 # shared variables
 squareSize = Screen.width/5
 # squareSize equals 400 on iPad Air
@@ -10,18 +13,21 @@ gutter = boundsSize.width*0.1
 # colours used throughout
 mint = "#2DD7AA"
 aqua = "#28affa"
-
+purple = "#877DD7"
 # animation presents
 snappy = 
 	curve: "spring(600, 30, 0)"
 slow = 
 	curve: "spring(120, 20, 0)"
 easy = 
-	time: 1
+	time: 2
 	curve: "ease-in-out"
 	
+goEasy = ->
+	Framer.Defaults.Animation = easy
+	
 # the main toggle...
-Framer.Defaults.Animation = slow
+Framer.Defaults.Animation = snappy
 
 # style
 textStyle = 
@@ -34,8 +40,31 @@ textStyle =
 
 # Set background
 bg = new BackgroundLayer
+	backgroundColor: "#333"
+	
+# –––––––––––––––––––––––––––––––––––––––
+# pages
+page = new PageComponent
+	width: Screen.width, height: Screen.height
+	scrollVertical: false
+	
+pageOne = new Layer
+	width: page.width, height: page.height
+	superLayer: page.content
 	backgroundColor: mint
 	
+pageTwo = new Layer
+	width: page.width, height: page.height
+	superLayer: page.content
+	backgroundColor: aqua
+page.addPage(pageTwo, "right")
+	
+pageThree = new Layer
+	width: page.width, height: page.height
+	superLayer: page.content
+	backgroundColor: purple
+page.addPage(pageThree, "right")
+
 canvas = new Layer
 	width: (boundsSize.width * 4) + (gutter * 3)
 	height: boundsSize.height
@@ -45,6 +74,9 @@ canvas = new Layer
 window.onresize = ->
 	canvas.center()
 	
+	
+# –––––––––––––––––––––––––––––––––––––––
+# interactions
 interactions = []
 for i in [0..3]
 	i = new Layer
@@ -123,7 +155,6 @@ positionTarget.states.add
 	
 positionTarget.on Events.Click, ->
 	this.states.next()
-	
 
 
 # –––––––––––––––––––––––––––––––––––––––
@@ -145,7 +176,30 @@ opacityTarget = new Layer
 	superLayer: opacityConstraints
 opacityTarget.states.add
 	last: opacity: 0
-
+	
 opacityTarget.on Events.Click, ->
 	this.states.next()
+	
+	
+# –––––––––––––––––––––––––––––––––––––––
+# page changes
+page.on "change:currentPage", ->
+	# reset states
+	scaleTarget.states.switch("default")
+	rotateTarget.states.switch("default")
+	positionTarget.states.switch("default")
+	opacityTarget.states.switch("default")
+	
+	# change animation values
+	if page.currentPage is pageTwo
+# 		print "page two"
+		Framer.Defaults.Animation = slow
+	else if page.currentPage is pageThree
+# 		print "page three"
+# 		Framer.Defaults.Animation = easy
+		goEasy()
+	else # page one or other
+# 		print "page one"
+		Framer.Defaults.Animation = snappy
+
 
