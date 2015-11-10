@@ -54,7 +54,7 @@ pageOne = new Layer
 pageTwo = new Layer
 	width: page.width, height: page.height
 	superLayer: page.content
-	backgroundColor: aqua
+	backgroundColor: null
 page.addPage(pageTwo, "right")
 	
 pageThree = new Layer
@@ -194,18 +194,14 @@ page.on "change:currentPage", ->
 	
 	# change animation values
 	if page.currentPage is pageTwo
-# 		print "page two"
-		for i in interactionsTargets
-			i.states.animationOptions = slow
 		
+		bg.backgroundColor = "red"
+		for i in interactionsTargets
+			i.states.animationOptions = slow	
 	else if page.currentPage is pageThree
-# 		print "page three"
-# 		Framer.Defaults.Animation = easy
 		for i in interactionsTargets
 			i.states.animationOptions = easy
-		
 	else
-# 		Framer.Defaults.Animation = snappy
 		for i in interactionsTargets
 			i.states.animationOptions = snappy
 
