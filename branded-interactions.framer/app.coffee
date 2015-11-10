@@ -11,6 +11,7 @@ white = "#FFFFFF"
 white80 = "rgba(255, 255, 255, 0.8)"
 white20 = "rgba(255, 255, 255, 0.2)"
 black50 = "rgba(0, 0, 0, 0.5)"
+black20 = "rgba(0, 0, 0, 0.2)"
 
 # style
 textStyle = 
@@ -144,6 +145,14 @@ rightIndicators[rightCurrent].states.switch("active")
 rightOne = rightPages[0]
 rightTwo = rightPages[1]
 rightThree = rightPages[2]
+
+# save
+# save = new Layer
+# 	width: 100, height: 100
+# 	maxX: right.width - 60, midY: indicator.midY
+# 	borderRadius: "50%"
+# 	backgroundColor: black50
+# 	superLayer: right
 
 # –––––––––––––––––––––––––––––––––––––––
 # setup 2
