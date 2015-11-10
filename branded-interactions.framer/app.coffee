@@ -1,6 +1,8 @@
-# –––––––––––––––––––––––––––––––––––––––
-# setup 1
+# <@>
 
+# ------------------------------------------------------
+# overall setup
+# ------------------------------------------------------
 # colours used throughout
 mint = "#2DD7AA"
 aqua = "#28affa"
@@ -38,8 +40,10 @@ Framer.Defaults.Animation = snappy
 bg = new BackgroundLayer
 	backgroundColor: grey
 
-# –––––––––––––––––––––––––––––––––––––––
-# left pages
+
+# ------------------------------------------------------
+# left side: pages, indicators
+# ------------------------------------------------------
 left = new PageComponent
 	width: Screen.width/2, height: Screen.height
 	scrollVertical: false
@@ -48,7 +52,7 @@ left = new PageComponent
 # array that will store our left page layers
 leftPages = []
 
-# Array that will store our left indicator layers
+# array that will store our left indicator layers
 leftIndicators = []	
 leftIndicatorsAmount = 3
 leftIndicatorsSize = 12
@@ -63,26 +67,27 @@ for i in [0...leftIndicatorsAmount]
 	# store left page layers in an array
 	leftPages.push(leftPage)
 		
-# 	indicator = new Layer 
-# 		backgroundColor: white
-# 		width: leftIndicatorsSize, height: leftIndicatorsSize
-# 		x: 28 * i, y: left.maxY - 100
-# 		borderRadius: "50%", opacity: 0.2
-# 		superLayer: left
-# 		
-# 	# Stay centered regardless of the amount of cards
-# 	indicator.x += (left.width / 2) - (leftIndicatorsSize * leftIndicatorsAmount)
-# 	
-# 	# States
-# 	indicator.states.add active: opacity: 0.8, scale:1.2
-# 	indicator.states.animationOptions = time: 0.5
-# 	
-# 	# Store indicators in our array
-# 	leftIndicators.push(indicator)
-# 
-# # set indicator for our current left page
-# leftCurrent = left.horizontalPageIndex(left.currentPage)
-# leftIndicators[leftCurrent].states.switch("active")
+	indicator = new Layer 
+		backgroundColor: white
+		width: leftIndicatorsSize, height: leftIndicatorsSize
+		x: 28 * i, y: left.maxY - 100
+		borderRadius: "50%", opacity: 0.2
+		superLayer: left
+		
+	# Stay centered regardless of the amount of cards
+	indicator.x += (left.width / 2) - (leftIndicatorsSize * leftIndicatorsAmount)
+	
+	# States
+	indicator.states.add active: opacity: 0.8, scale:1.2
+	indicator.states.animationOptions = time: 0.5
+	
+	# Store indicators in our array
+	leftIndicators.push(indicator)
+
+# set indicator for our current left page
+leftCurrent = left.horizontalPageIndex(left.currentPage)
+leftIndicators[leftCurrent].states.switch("active")
+
 	
 # rename for easy access
 leftOne = leftPages[0]
@@ -94,8 +99,9 @@ leftTwo.backgroundColor = mint
 leftThree.backgroundColor = aqua
 
 
-# –––––––––––––––––––––––––––––––––––––––
-# slider
+# -----------------------------
+# left side: slider
+# -----------------------------
 sliderWidth = left.width/2
 sliderSize = 
 	width: sliderWidth
@@ -111,20 +117,12 @@ sliderCanvas = new Layer
 	clip: false
 
 sliderHolder = new Layer
-	width: sliderCanvas.width * 1.2, height: sliderCanvas.height * 1.8
+	width: sliderCanvas.width * 1.4, height: sliderCanvas.height * 1.8
 	midX: sliderCanvas.midX, midY: sliderCanvas.midY
 	borderRadius: 12
 	backgroundColor: white20
 	superLayer: left
 sliderCanvas.bringToFront()
-
-# squareCanvas = new Layer
-# 	midX: rightOne.width/2, midY: rightOne.height/2
-# 	width: (boundsSize.width * 2) + (gutter * 1)
-# 	height: (boundsSize.height * 2) + (gutter * 1)
-# 	backgroundColor: null
-# 	superLayer: rightOne
-# 	clip: false
 	
 # array that will store our right page layers
 sliders = []
@@ -146,8 +144,10 @@ sliderOne = sliders[0]
 sliderTwo = sliders[1]
 sliderThree = sliders[2]
 
-# –––––––––––––––––––––––––––––––––––––––
-# right pages
+
+# ------------------------------------------------------
+# right side: pages, indicators, save
+# ------------------------------------------------------
 right = new PageComponent
 	x: Screen.width/2
 	width: Screen.width/2, height: Screen.height
@@ -206,8 +206,9 @@ rightThree = rightPages[2]
 # 	backgroundColor: black50
 # 	superLayer: right
 
-# –––––––––––––––––––––––––––––––––––––––
-# interactions
+# -----------------------------
+# right side: basic interactions
+# -----------------------------
 squareSize = right.width/3
 boundsSize = 
 	width: squareSize
@@ -259,7 +260,7 @@ opacity.html = opacity.name
 
 interactionsTargets = []
 
-# –––––––––––––––––––––––––––––––––––––––
+# -----------------------------
 # scale
 scaleTarget = new Layer
 	size: boundsSize
@@ -276,7 +277,7 @@ scale.on Events.Click, ->
 	scaleTarget.states.next()
 
 
-# –––––––––––––––––––––––––––––––––––––––
+# -----------------------------
 # rotate
 rotateTarget = new Layer
 	size: boundsSize
@@ -292,7 +293,7 @@ rotateTarget.states.add
 rotate.on Events.Click, ->
 	rotateTarget.states.next()
 	
-# –––––––––––––––––––––––––––––––––––––––
+# -----------------------------
 # position
 positionTarget = new Layer
 	size: boundsSize
@@ -310,7 +311,7 @@ position.on Events.Click, ->
 	positionTarget.states.next()
 
 
-# –––––––––––––––––––––––––––––––––––––––
+# -----------------------------
 # opacity
 opacityTargetTop = new Layer
 	size: boundsSize
@@ -334,13 +335,11 @@ opacityTarget.states.add
 	
 opacity.on Events.Click, ->
 	opacityTarget.states.next()
+	
 
-
-
-
-# –––––––––––––––––––––––––––––––––––––––
-# page changes
-
+# -----------------------------
+# right side: iphone #1
+# -----------------------------
 iphone = new Layer
 	midX: rightOne.width/2, midY: rightOne.height/2
 	width: 994, height: 2028
@@ -366,11 +365,18 @@ iphoneTarget.states.add
 	
 iphoneTarget.on Events.Click, ->
 	iphoneTarget.states.next()
-	
-# –––––––––––––––––––––––––––––––––––––––
-# page changes
 
+	
+# ------------------------------------------------------
+# left side: changes
+# ------------------------------------------------------
 left.on "change:currentPage", ->
+	# Update indicators: remove old
+	indicator.states.switch("default") for indicator in leftIndicators
+	# Update indicators: update new
+	leftCurrent = left.horizontalPageIndex(left.currentPage)
+	leftIndicators[leftCurrent].states.switch("active")
+	
 	# change animation values
 	if left.currentPage is leftTwo
 		for i in interactionsTargets
@@ -391,7 +397,10 @@ left.on "change:currentPage", ->
 	# rotateTarget.states.switch("default")
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
-			
+
+# ------------------------------------------------------
+# right side: changes
+# ------------------------------------------------------
 right.on "change:currentPage", ->
 	# Update indicators: remove old
 	indicator.states.switch("default") for indicator in rightIndicators
