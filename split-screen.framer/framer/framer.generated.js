@@ -2,11 +2,11 @@
 
 
 if (typeof(DeviceComponent) !== "undefined") {DeviceComponent.Devices["iphone-6-silver"].deviceImageJP2 = false};
-window.Framer.Defaults.DeviceView = {"deviceScale":-1,"deviceType":"ipad-air-silver","contentScale":1,"orientation":-90};
+window.Framer.Defaults.DeviceView = {"deviceScale":0.25,"deviceType":"ipad-air-silver","contentScale":1,"orientation":-90};
 
-window.Framer.Defaults.DeviceComponent = {"deviceScale":-1,"deviceType":"ipad-air-silver","contentScale":1,"orientation":-90};
+window.Framer.Defaults.DeviceComponent = {"deviceScale":0.25,"deviceType":"ipad-air-silver","contentScale":1,"orientation":-90};
 
-window.FramerStudioInfo = {"deviceImagesUrl":"\/_server\/resources\/DeviceImages","documentTitle":"branded-interactions.framer"};
+window.FramerStudioInfo = {"deviceImagesUrl":"\/_server\/resources\/DeviceImages","documentTitle":"split-screen.framer"};
 
 Framer.Device = new Framer.DeviceView();
 Framer.Device.setupContext();
