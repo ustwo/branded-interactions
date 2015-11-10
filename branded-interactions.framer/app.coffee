@@ -95,6 +95,58 @@ leftThree.backgroundColor = aqua
 
 
 # –––––––––––––––––––––––––––––––––––––––
+# slider
+sliderWidth = left.width/2
+sliderSize = 
+	width: sliderWidth
+	height: 24
+sliderGutter = sliderSize.height * 5
+
+sliderCanvas = new Layer
+	width: sliderWidth
+	height: (sliderSize.height * 3) + (sliderGutter * 2)
+	midX: left.width/2, midY: left.height/2
+	backgroundColor: null
+	superLayer: left
+	clip: false
+
+sliderHolder = new Layer
+	width: sliderCanvas.width * 1.2, height: sliderCanvas.height * 1.8
+	midX: sliderCanvas.midX, midY: sliderCanvas.midY
+	borderRadius: 12
+	backgroundColor: white20
+	superLayer: left
+sliderCanvas.bringToFront()
+
+# squareCanvas = new Layer
+# 	midX: rightOne.width/2, midY: rightOne.height/2
+# 	width: (boundsSize.width * 2) + (gutter * 1)
+# 	height: (boundsSize.height * 2) + (gutter * 1)
+# 	backgroundColor: null
+# 	superLayer: rightOne
+# 	clip: false
+	
+# array that will store our right page layers
+sliders = []
+
+for i in [0..2]
+	slider = new SliderComponent
+		y: i * (sliderSize.height + sliderGutter)
+		width: sliderWidth, height: sliderSize.height
+		backgroundColor: white20
+		knobSize: 48
+		min: 0, max: 1, value: 0.5
+		superLayer: sliderCanvas
+	slider.fill.backgroundColor = white80
+	
+	sliders.push(slider)
+
+# rename for easy access
+sliderOne = sliders[0]
+sliderTwo = sliders[1]
+sliderThree = sliders[2]
+
+# –––––––––––––––––––––––––––––––––––––––
 # right pages
 right = new PageComponent
 	x: Screen.width/2
@@ -105,7 +157,7 @@ right = new PageComponent
 # array that will store our right page layers
 rightPages = []
 
-# Array that will store our right indicator layers
+# array that will store our right indicator layers
 rightIndicators = []	
 rightIndicatorsAmount = 3
 rightIndicatorsSize = 12
@@ -155,25 +207,21 @@ rightThree = rightPages[2]
 # 	superLayer: right
 
 # –––––––––––––––––––––––––––––––––––––––
-# setup 2
-
-# shared variables
+# interactions
 squareSize = right.width/3
 boundsSize = 
 	width: squareSize
 	height: squareSize
 gutter = boundsSize.width*0.2
 
-canvas = new Layer
+squareCanvas = new Layer
 	midX: rightOne.width/2, midY: rightOne.height/2
 	width: (boundsSize.width * 2) + (gutter * 1)
 	height: (boundsSize.height * 2) + (gutter * 1)
 	backgroundColor: null
 	superLayer: rightOne
 	clip: false
-
-# –––––––––––––––––––––––––––––––––––––––
-# interactions
+	
 interactions = []
 rows = 2
 cols = 2
@@ -188,7 +236,7 @@ cols = 2
 			borderRadius: 12
 			clip: false
 			style: textStyle
-			superLayer: canvas
+			superLayer: squareCanvas
 				
 		interactions.push(i)
 
@@ -337,6 +385,12 @@ left.on "change:currentPage", ->
 			i.states.animationOptions = snappy
 		# also update overall component background to match
 		left.backgroundColor = leftOne.backgroundColor
+		
+	# reset states
+	scaleTarget.states.switch("default")
+	# rotateTarget.states.switch("default")
+	positionTarget.states.switch("default")
+	opacityTarget.states.switch("default")
 			
 right.on "change:currentPage", ->
 	# Update indicators: remove old
