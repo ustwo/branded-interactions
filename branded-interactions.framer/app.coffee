@@ -67,26 +67,26 @@ for i in [0...leftIndicatorsAmount]
 	# store left page layers in an array
 	leftPages.push(leftPage)
 		
-	indicator = new Layer 
-		backgroundColor: white
-		width: leftIndicatorsSize, height: leftIndicatorsSize
-		x: 28 * i, y: left.maxY - 100
-		borderRadius: "50%", opacity: 0.2
-		superLayer: left
-		
-	# Stay centered regardless of the amount of cards
-	indicator.x += (left.width / 2) - (leftIndicatorsSize * leftIndicatorsAmount)
-	
-	# States
-	indicator.states.add active: opacity: 0.8, scale:1.2
-	indicator.states.animationOptions = time: 0.5
-	
-	# Store indicators in our array
-	leftIndicators.push(indicator)
-
-# set indicator for our current left page
-leftCurrent = left.horizontalPageIndex(left.currentPage)
-leftIndicators[leftCurrent].states.switch("active")
+# 	indicator = new Layer 
+# 		backgroundColor: white
+# 		width: leftIndicatorsSize, height: leftIndicatorsSize
+# 		x: 28 * i, y: left.maxY - 100
+# 		borderRadius: "50%", opacity: 0.2
+# 		superLayer: left
+# 		
+# 	# Stay centered regardless of the amount of cards
+# 	indicator.x += (left.width / 2) - (leftIndicatorsSize * leftIndicatorsAmount)
+# 	
+# 	# States
+# 	indicator.states.add active: opacity: 0.8, scale:1.2
+# 	indicator.states.animationOptions = time: 0.5
+# 	
+# 	# Store indicators in our array
+# 	leftIndicators.push(indicator)
+# 
+# # set indicator for our current left page
+# leftCurrent = left.horizontalPageIndex(left.currentPage)
+# leftIndicators[leftCurrent].states.switch("active")
 
 	
 # rename for easy access
@@ -371,11 +371,11 @@ iphoneTarget.on Events.Click, ->
 # left side: changes
 # ------------------------------------------------------
 left.on "change:currentPage", ->
-	# Update indicators: remove old
-	indicator.states.switch("default") for indicator in leftIndicators
-	# Update indicators: update new
-	leftCurrent = left.horizontalPageIndex(left.currentPage)
-	leftIndicators[leftCurrent].states.switch("active")
+# 	Update indicators: remove old
+# 	indicator.states.switch("default") for indicator in leftIndicators
+# 	Update indicators: update new
+# 	leftCurrent = left.horizontalPageIndex(left.currentPage)
+# 	leftIndicators[leftCurrent].states.switch("active")
 	
 	# change animation values
 	if left.currentPage is leftTwo
