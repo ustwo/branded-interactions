@@ -16,13 +16,23 @@ black50 = "rgba(0, 0, 0, 0.5)"
 black20 = "rgba(0, 0, 0, 0.2)"
 
 # style
-textStyle = 
+squareStyle = 
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
 	"line-height": "600px"
 	"text-align": "center"
 	"text-transform": "uppercase"
 	"color": black50
+	
+presetStyle = 
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	"line-height": "100px"
+	"text-align": "center"
+	"text-transform": "uppercase"
+	"color": white80
+# 	"padding": "10pt 60pt"
+	"background-color": black20
 
 # animation presents
 snappy = 
@@ -44,60 +54,9 @@ bg = new BackgroundLayer
 # ------------------------------------------------------
 # left side: pages, indicators
 # ------------------------------------------------------
-left = new PageComponent
+left = new Layer
 	width: Screen.width/2, height: Screen.height
-	scrollVertical: false
-	backgroundColor: purple
-
-# array that will store our left page layers
-leftPages = []
-
-# array that will store our left indicator layers
-leftIndicators = []	
-leftIndicatorsAmount = 3
-leftIndicatorsSize = 12
-
-# generate page and indicator layers
-for i in [0...leftIndicatorsAmount]
-	leftPage = new Layer 
-		width: left.width, height: left.height
-		x: left.width * i, superLayer: left.content
-		backgroundColor: null
-		
-	# store left page layers in an array
-	leftPages.push(leftPage)
-		
-	indicator = new Layer 
-		backgroundColor: white
-		width: leftIndicatorsSize, height: leftIndicatorsSize
-		x: 28 * i, y: left.maxY - 100
-		borderRadius: "50%", opacity: 0.2
-		superLayer: left
-		
-	# Stay centered regardless of the amount of cards
-	indicator.x += (left.width / 2) - (leftIndicatorsSize * leftIndicatorsAmount)
-	
-	# States
-	indicator.states.add active: opacity: 0.8, scale:1.2
-	indicator.states.animationOptions = time: 0.5
-	
-	# Store indicators in our array
-	leftIndicators.push(indicator)
-
-# set indicator for our current left page
-leftCurrent = left.horizontalPageIndex(left.currentPage)
-leftIndicators[leftCurrent].states.switch("active")
-
-	
-# rename for easy access
-leftOne = leftPages[0]
-leftTwo = leftPages[1]
-leftThree = leftPages[2]
-
-leftOne.backgroundColor = purple
-leftTwo.backgroundColor = mint
-leftThree.backgroundColor = aqua
-
+	backgroundColor: mint
 
 # -----------------------------
 # left side: slider
@@ -236,7 +195,7 @@ cols = 2
 			backgroundColor: white20
 			borderRadius: 12
 			clip: false
-			style: textStyle
+			style: squareStyle
 			superLayer: squareCanvas
 				
 		interactions.push(i)
@@ -370,33 +329,7 @@ iphoneTarget.on Events.Click, ->
 # ------------------------------------------------------
 # left side: changes
 # ------------------------------------------------------
-left.on "change:currentPage", ->
-	# Update indicators: remove old
-	indicator.states.switch("default") for indicator in leftIndicators
-	# Update indicators: update new
-	leftCurrent = left.horizontalPageIndex(left.currentPage)
-	leftIndicators[leftCurrent].states.switch("active")
-	
-	# change animation values
-	if left.currentPage is leftTwo
-		for i in interactionsTargets
-			i.states.animationOptions = slow	
-	else if left.currentPage is leftThree #last
-		for i in interactionsTargets
-			i.states.animationOptions = easy
-		# also update overall component background to match
-		left.backgroundColor = leftThree.backgroundColor
-	else # leftOne or other
-		for i in interactionsTargets
-			i.states.animationOptions = snappy
-		# also update overall component background to match
-		left.backgroundColor = leftOne.backgroundColor
-		
-	# reset states
-	scaleTarget.states.switch("default")
-	# rotateTarget.states.switch("default")
-	positionTarget.states.switch("default")
-	opacityTarget.states.switch("default")
+
 
 # ------------------------------------------------------
 # right side: changes
@@ -414,6 +347,57 @@ right.on "change:currentPage", ->
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
 	
-	
-	
 
+# Create PageComponent
+presets = new PageComponent 
+	midX: left.midX, maxY: sliderHolder.y
+	width: sliderHolder.width
+
+	height: 150
+	scrollVertical: false
+	superLayer: left
+
+
+allPresets = []
+# Create layers in a for-loop
+for i in [0...6]
+	preset = new Layer 
+		superLayer: presets.content
+		width: 150
+		height: 100
+		clip: false
+		x: 180 * i
+		style: presetStyle
+		borderRadius: 6
+		opacity: 0.3
+	allPresets.push(preset)
+	
+allPresets[0].html = "sluggish"
+allPresets[1].html = "slow"
+allPresets[2].html = "smooth"
+allPresets[3].html = "dynamic"
+allPresets[4].html = "speedy"
+allPresets[5].html = "blitz"
+
+# Staging
+# presets.snapToNextPage()
+presets.currentPage.opacity = 1
+
+# Update pages
+presets.on "change:currentPage", ->
+	presets.previousPage.animate 
+		properties:
+			opacity: 0.3
+		time: 0.4
+		
+	presets.currentPage.animate 
+		properties:
+			opacity: 1
+		time: 0.4
+		
+for i in allPresets
+	i.on Events.Click, ->
+		presets.snapToPage(this)
+
+
+	
