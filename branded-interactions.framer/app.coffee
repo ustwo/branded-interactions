@@ -16,13 +16,23 @@ black50 = "rgba(0, 0, 0, 0.5)"
 black20 = "rgba(0, 0, 0, 0.2)"
 
 # style
-textStyle = 
+squareStyle = 
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
 	"line-height": "600px"
 	"text-align": "center"
 	"text-transform": "uppercase"
 	"color": black50
+	
+presetStyle = 
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	"line-height": "100px"
+	"text-align": "center"
+	"text-transform": "uppercase"
+	"color": white80
+# 	"padding": "10pt 60pt"
+	"background-color": black20
 
 # animation presents
 snappy = 
@@ -185,7 +195,7 @@ cols = 2
 			backgroundColor: white20
 			borderRadius: 12
 			clip: false
-			style: textStyle
+			style: squareStyle
 			superLayer: squareCanvas
 				
 		interactions.push(i)
@@ -337,41 +347,6 @@ right.on "change:currentPage", ->
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
 	
-	
-	
-# presets = []
-# presetsGroup = new Layer
-# 	width: left.width / 1.5
-# 	midX: left.midX, y: left.height/5
-# # 	backgroundColor: null
-# 	clip: false
-# 
-# rabbit = new Layer
-# 	width: 322, height: 290
-# 	scale: 0.2
-# 	image: "images/rabbit.png"
-# turtle = new Layer
-# 	width: 192, height: 136
-# 	scale: 0.34
-# 	image: "images/turtle.png"
-# wave = new Layer
-# 	width: 160, height: 130
-# 	scale: 0.34
-# 	image: "images/wave.png"
-# coil = new Layer
-# 	width: 112, height: 108
-# 	image: "images/coil.png"
-# eightball = new Layer
-# 	width: 152, height: 152
-# 	scale: 0.34
-# 	image: "images/eightball.png"
-# 	
-# presets.push(rabbit, turtle, wave, coil, eightball)
-# 
-# for i in presets
-# 	i.opacity = 0.2
-# # 	i.midY = presetsGroup.midY
-# 	i.superLayer = presetsGroup
 
 # Create PageComponent
 presets = new PageComponent 
@@ -385,28 +360,27 @@ presets = new PageComponent
 
 allPresets = []
 # Create layers in a for-loop
-for i in [0...5]
+for i in [0...6]
 	preset = new Layer 
 		superLayer: presets.content
 		width: 150
-		height: 150
+		height: 100
 		clip: false
-		backgroundColor: "#fff"
+		x: 180 * i
+		style: presetStyle
 		borderRadius: 6
 		opacity: 0.3
-		x: 150 * i
-		scale: 0.3
 	allPresets.push(preset)
 	
-allPresets[0].image = "images/turtle.png"
-# allPresets[0].scale = 0.3
-allPresets[1].image = "images/eightball.png"
-allPresets[2].image = "images/wave.png"
-allPresets[3].image = "images/coil.png"
-allPresets[4].image = "images/rabbit.png"
+allPresets[0].html = "sluggish"
+allPresets[1].html = "slow"
+allPresets[2].html = "smooth"
+allPresets[3].html = "dynamic"
+allPresets[4].html = "speedy"
+allPresets[5].html = "blitz"
 
 # Staging
-# page.snapToNextPage()
+# presets.snapToNextPage()
 presets.currentPage.opacity = 1
 
 # Update pages
