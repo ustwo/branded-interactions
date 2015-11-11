@@ -44,60 +44,9 @@ bg = new BackgroundLayer
 # ------------------------------------------------------
 # left side: pages, indicators
 # ------------------------------------------------------
-left = new PageComponent
+left = new Layer
 	width: Screen.width/2, height: Screen.height
-	scrollVertical: false
-	backgroundColor: purple
-
-# array that will store our left page layers
-leftPages = []
-
-# array that will store our left indicator layers
-leftIndicators = []	
-leftIndicatorsAmount = 3
-leftIndicatorsSize = 12
-
-# generate page and indicator layers
-for i in [0...leftIndicatorsAmount]
-	leftPage = new Layer 
-		width: left.width, height: left.height
-		x: left.width * i, superLayer: left.content
-		backgroundColor: null
-		
-	# store left page layers in an array
-	leftPages.push(leftPage)
-		
-# 	indicator = new Layer 
-# 		backgroundColor: white
-# 		width: leftIndicatorsSize, height: leftIndicatorsSize
-# 		x: 28 * i, y: left.maxY - 100
-# 		borderRadius: "50%", opacity: 0.2
-# 		superLayer: left
-# 		
-# 	# Stay centered regardless of the amount of cards
-# 	indicator.x += (left.width / 2) - (leftIndicatorsSize * leftIndicatorsAmount)
-# 	
-# 	# States
-# 	indicator.states.add active: opacity: 0.8, scale:1.2
-# 	indicator.states.animationOptions = time: 0.5
-# 	
-# 	# Store indicators in our array
-# 	leftIndicators.push(indicator)
-# 
-# # set indicator for our current left page
-# leftCurrent = left.horizontalPageIndex(left.currentPage)
-# leftIndicators[leftCurrent].states.switch("active")
-
-	
-# rename for easy access
-leftOne = leftPages[0]
-leftTwo = leftPages[1]
-leftThree = leftPages[2]
-
-leftOne.backgroundColor = purple
-leftTwo.backgroundColor = mint
-leftThree.backgroundColor = aqua
-
+	backgroundColor: mint
 
 # -----------------------------
 # left side: slider
@@ -370,33 +319,7 @@ iphoneTarget.on Events.Click, ->
 # ------------------------------------------------------
 # left side: changes
 # ------------------------------------------------------
-left.on "change:currentPage", ->
-# 	Update indicators: remove old
-# 	indicator.states.switch("default") for indicator in leftIndicators
-# 	Update indicators: update new
-# 	leftCurrent = left.horizontalPageIndex(left.currentPage)
-# 	leftIndicators[leftCurrent].states.switch("active")
-	
-	# change animation values
-	if left.currentPage is leftTwo
-		for i in interactionsTargets
-			i.states.animationOptions = slow	
-	else if left.currentPage is leftThree #last
-		for i in interactionsTargets
-			i.states.animationOptions = easy
-		# also update overall component background to match
-		left.backgroundColor = leftThree.backgroundColor
-	else # leftOne or other
-		for i in interactionsTargets
-			i.states.animationOptions = snappy
-		# also update overall component background to match
-		left.backgroundColor = leftOne.backgroundColor
-		
-	# reset states
-	scaleTarget.states.switch("default")
-	# rotateTarget.states.switch("default")
-	positionTarget.states.switch("default")
-	opacityTarget.states.switch("default")
+
 
 # ------------------------------------------------------
 # right side: changes
@@ -416,4 +339,41 @@ right.on "change:currentPage", ->
 	
 	
 	
+presets = []
+presetsGroup = new Layer
+	width: left.width / 1.5
+	midX: left.midX, y: left.height/5
+# 	backgroundColor: null
+	clip: false
 
+rabbit = new Layer
+	width: 322, height: 290
+	scale: 0.2
+	image: "images/rabbit.png"
+turtle = new Layer
+	width: 192, height: 136
+	scale: 0.34
+	image: "images/turtle.png"
+wave = new Layer
+	width: 160, height: 130
+	scale: 0.34
+	image: "images/wave.png"
+coil = new Layer
+	width: 112, height: 108
+	image: "images/coil.png"
+eightball = new Layer
+	width: 152, height: 152
+	scale: 0.34
+	image: "images/eightball.png"
+	
+presets.push(rabbit, turtle, wave, coil, eightball)
+
+for i in presets
+	i.opacity = 0.2
+# 	i.midY = presetsGroup.midY
+	i.superLayer = presetsGroup
+
+
+
+
+	
