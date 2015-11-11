@@ -339,41 +339,91 @@ right.on "change:currentPage", ->
 	
 	
 	
-presets = []
-presetsGroup = new Layer
-	width: left.width / 1.5
-	midX: left.midX, y: left.height/5
-# 	backgroundColor: null
-	clip: false
+# presets = []
+# presetsGroup = new Layer
+# 	width: left.width / 1.5
+# 	midX: left.midX, y: left.height/5
+# # 	backgroundColor: null
+# 	clip: false
+# 
+# rabbit = new Layer
+# 	width: 322, height: 290
+# 	scale: 0.2
+# 	image: "images/rabbit.png"
+# turtle = new Layer
+# 	width: 192, height: 136
+# 	scale: 0.34
+# 	image: "images/turtle.png"
+# wave = new Layer
+# 	width: 160, height: 130
+# 	scale: 0.34
+# 	image: "images/wave.png"
+# coil = new Layer
+# 	width: 112, height: 108
+# 	image: "images/coil.png"
+# eightball = new Layer
+# 	width: 152, height: 152
+# 	scale: 0.34
+# 	image: "images/eightball.png"
+# 	
+# presets.push(rabbit, turtle, wave, coil, eightball)
+# 
+# for i in presets
+# 	i.opacity = 0.2
+# # 	i.midY = presetsGroup.midY
+# 	i.superLayer = presetsGroup
 
-rabbit = new Layer
-	width: 322, height: 290
-	scale: 0.2
-	image: "images/rabbit.png"
-turtle = new Layer
-	width: 192, height: 136
-	scale: 0.34
-	image: "images/turtle.png"
-wave = new Layer
-	width: 160, height: 130
-	scale: 0.34
-	image: "images/wave.png"
-coil = new Layer
-	width: 112, height: 108
-	image: "images/coil.png"
-eightball = new Layer
-	width: 152, height: 152
-	scale: 0.34
-	image: "images/eightball.png"
+# Create PageComponent
+presets = new PageComponent 
+	midX: left.midX, maxY: sliderHolder.y
+	width: sliderHolder.width
+
+	height: 150
+	scrollVertical: false
+	superLayer: left
+
+
+allPresets = []
+# Create layers in a for-loop
+for i in [0...5]
+	preset = new Layer 
+		superLayer: presets.content
+		width: 150
+		height: 150
+		clip: false
+		backgroundColor: "#fff"
+		borderRadius: 6
+		opacity: 0.3
+		x: 150 * i
+		scale: 0.3
+	allPresets.push(preset)
 	
-presets.push(rabbit, turtle, wave, coil, eightball)
+allPresets[0].image = "images/turtle.png"
+# allPresets[0].scale = 0.3
+allPresets[1].image = "images/eightball.png"
+allPresets[2].image = "images/wave.png"
+allPresets[3].image = "images/coil.png"
+allPresets[4].image = "images/rabbit.png"
 
-for i in presets
-	i.opacity = 0.2
-# 	i.midY = presetsGroup.midY
-	i.superLayer = presetsGroup
+# Staging
+# page.snapToNextPage()
+presets.currentPage.opacity = 1
 
-
+# Update pages
+presets.on "change:currentPage", ->
+	presets.previousPage.animate 
+		properties:
+			opacity: 0.3
+		time: 0.4
+		
+	presets.currentPage.animate 
+		properties:
+			opacity: 1
+		time: 0.4
+		
+for i in allPresets
+	i.on Events.Click, ->
+		presets.snapToPage(this)
 
 
 	

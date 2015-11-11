@@ -4,16 +4,17 @@ bg = new BackgroundLayer
 
 # Create PageComponent
 page = new PageComponent 
-	width: 300
+	width: (150*4) + (10*3)
 	height: 150
 	scrollVertical: false
 	borderRadius: 6
+	clip: true
 	
 page.center()	
 
 pages = []
 # Create layers in a for-loop
-for i in [0...8]
+for i in [0...4]
 	aPage = new Layer 
 		superLayer: page.content
 		width: 150
@@ -25,7 +26,7 @@ for i in [0...8]
 	pages.push(aPage)
 	
 # Staging
-page.snapToNextPage()
+# page.snapToNextPage()
 page.currentPage.opacity = 1
 
 # Update pages
