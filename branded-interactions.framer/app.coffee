@@ -35,16 +35,16 @@ presetStyle =
 	"background-color": black20
 
 # animation presents
-snappy = 
+snappySpeed = 
 	curve: "spring(600, 30, 0)"
-slow = 
+slowSpeed = 
 	curve: "spring(120, 20, 0)"
-easy = 
+easySpeed = 
 	time: 2
 	curve: "ease-in-out"
 
-# default to snappy
-Framer.Defaults.Animation = snappy
+# default to snappySpeed
+Framer.Defaults.Animation = snappySpeed
 
 # bg layer
 bg = new BackgroundLayer
@@ -373,14 +373,26 @@ for i in [0...6]
 	allPresets.push(preset)
 	
 allPresets[0].html = "sluggish"
+allPresets[0].name = "sluggish"
+sluggish = allPresets[0]
 allPresets[1].html = "slow"
+allPresets[1].name = "slow"
+slow = allPresets[1]
 allPresets[2].html = "smooth"
+allPresets[2].name = "smooth"
+smooth = allPresets[2]
 allPresets[3].html = "dynamic"
+allPresets[3].name = "dynamic"
+dynamic = allPresets[3]
 allPresets[4].html = "speedy"
+allPresets[4].name = "speedy"
+speedy = allPresets[4]
 allPresets[5].html = "blitz"
+allPresets[5].name = "blitz"
+blitz = allPresets[5]
 
-# Staging
-# presets.snapToNextPage()
+# staging
+presets.snapToPage(allPresets[3], false)
 presets.currentPage.opacity = 1
 
 # Update pages
@@ -394,6 +406,25 @@ presets.on "change:currentPage", ->
 		properties:
 			opacity: 1
 		time: 0.4
+		
+	# reset states
+	scaleTarget.states.switch("default")
+	# rotateTarget.states.switch("default")
+	positionTarget.states.switch("default")
+	opacityTarget.states.switch("default")
+		
+	if presets.currentPage is sluggish or presets.currentPage is slow or presets.currentPage is smooth
+		for i in interactionsTargets
+			i.states.animationOptions = slowSpeed	
+	if presets.currentPage is smooth
+		for i in interactionsTargets
+			i.states.animationOptions = easySpeed
+				
+	if presets.currentPage is dynamic or presets.currentPage is speedy or presets.currentPage is blitz
+		for i in interactionsTargets
+			i.states.animationOptions = snappySpeed
+			
+			
 		
 for i in allPresets
 	i.on Events.Click, ->
