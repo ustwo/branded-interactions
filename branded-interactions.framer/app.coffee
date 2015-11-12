@@ -4,7 +4,8 @@
 # overall setup
 # ------------------------------------------------------
 # colours used throughout
-mint = "#2DD7AA"
+mint = "rgba(45, 215, 170, 1)"
+mint20 = "rgba(45, 215, 170, 0.20)"
 aqua = "#28affa"
 purple = "#877DD7"
 grey = "#333333"
@@ -14,7 +15,7 @@ white80 = "rgba(255, 255, 255, 0.8)"
 white20 = "rgba(255, 255, 255, 0.2)"
 black50 = "rgba(0, 0, 0, 0.5)"
 black20 = "rgba(0, 0, 0, 0.2)"
-
+transparent = "rgba(0, 0, 0, 0)"
 # style
 squareStyle = 
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
@@ -35,13 +36,19 @@ presetStyle =
 	"background-color": black20
 
 # animation presents
-snappySpeed = 
-	curve: "spring(600, 30, 0)"
+sluggishSpeed = 
+	curve: "spring(120, 20, 0)"
 slowSpeed = 
 	curve: "spring(120, 20, 0)"
-easySpeed = 
+smoothSpeed = 
 	time: 2
 	curve: "ease-in-out"
+dynamicSpeed = 
+	curve: "spring(120, 20, 0)"	
+snappySpeed = 
+	curve: "spring(600, 30, 0)"
+blitzSpeed = 
+	curve: "spring(120, 20, 0)"
 
 # default to snappySpeed
 Framer.Defaults.Animation = snappySpeed
@@ -350,13 +357,19 @@ right.on "change:currentPage", ->
 
 # Create PageComponent
 presets = new PageComponent 
-	midX: left.midX, maxY: sliderHolder.y
-	width: sliderHolder.width
+	midX: left.midX, maxY: sliderHolder.y - 50
+	width: sliderHolder.width * 1.05
 
-	height: 150
+	height: 100
 	scrollVertical: false
 	superLayer: left
 
+presetsMask = new Layer
+	width: presets.width, height: presets.height
+	midX: presets.midX, y: presets.y
+	style:
+		"background": "-webkit-linear-gradient(left, #{mint} 0%, #{mint20} 4%, #{mint20} 96%, #{mint} 100%)"
+# 	opacity: 0
 
 allPresets = []
 # Create layers in a for-loop
@@ -384,9 +397,9 @@ smooth = allPresets[2]
 allPresets[3].html = "dynamic"
 allPresets[3].name = "dynamic"
 dynamic = allPresets[3]
-allPresets[4].html = "speedy"
-allPresets[4].name = "speedy"
-speedy = allPresets[4]
+allPresets[4].html = "snappy"
+allPresets[4].name = "snappy"
+snappy = allPresets[4]
 allPresets[5].html = "blitz"
 allPresets[5].name = "blitz"
 blitz = allPresets[5]
@@ -397,33 +410,50 @@ presets.currentPage.opacity = 1
 
 # Update pages
 presets.on "change:currentPage", ->
+	# animate out previousPage
 	presets.previousPage.animate 
 		properties:
 			opacity: 0.3
 		time: 0.4
-		
+	# animate in new currentPage
 	presets.currentPage.animate 
 		properties:
 			opacity: 1
 		time: 0.4
 		
+	if presets.currentPage is sluggish
+		for i in interactionsTargets
+			i.states.animationOptions = sluggishSpeed
+	
+	else if presets.currentPage is slow
+		for i in interactionsTargets
+			i.states.animationOptions = slowSpeed
+				
+	else if presets.currentPage is smooth
+		for i in interactionsTargets
+			i.states.animationOptions = smoothSpeed
+				
+	else if presets.currentPage is dynamic
+		for i in interactionsTargets
+			i.states.animationOptions = dynamicSpeed
+	
+	else if presets.currentPage is snappy
+		for i in interactionsTargets
+			i.states.animationOptions = snappySpeed
+		
+	else if presets.currentPage is blitz
+		for i in interactionsTargets
+			i.states.animationOptions = blitzSpeed
+			
+	else # edge-cases, default speed
+		for i in interactionsTargets
+			i.states.animationOptions = snappySpeed
+			
 	# reset states
 	scaleTarget.states.switch("default")
 	# rotateTarget.states.switch("default")
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
-		
-	if presets.currentPage is sluggish or presets.currentPage is slow or presets.currentPage is smooth
-		for i in interactionsTargets
-			i.states.animationOptions = slowSpeed	
-	if presets.currentPage is smooth
-		for i in interactionsTargets
-			i.states.animationOptions = easySpeed
-				
-	if presets.currentPage is dynamic or presets.currentPage is speedy or presets.currentPage is blitz
-		for i in interactionsTargets
-			i.states.animationOptions = snappySpeed
-			
 			
 		
 for i in allPresets
