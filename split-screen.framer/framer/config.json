@@ -1,8 +1,0 @@
-{
-  "updateDelay" : 0.3,
-  "deviceScale" : 0.25,
-  "deviceOrientation" : -90,
-  "contentScale" : 1,
-  "sharedPrototype" : 0,
-  "deviceType" : "ipad-air-silver"
-}
