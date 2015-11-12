@@ -100,9 +100,9 @@ for i in [0..2]
 		backgroundColor: white20
 		knobSize: 48
 		min: 0, max: 1, value: 0.5
+		pixelAlign: true
 		superLayer: sliderCanvas
 	slider.fill.backgroundColor = white80
-	
 	sliders.push(slider)
 
 # rename for easy access
@@ -110,19 +110,33 @@ tension = sliders[0]
 friction = sliders[1]
 velocity = sliders[2]
 
+# adjust values for each specific part
+tension.max = 1000
+tension.value = 500
+
+friction.max = 100
+friction.value = 25
+
+velocity.max = 100
+velocity.value = 0
+
+
 # -----------------------------
 # slider logic: spring
 
 # spring values in an array
-springValues = [tension, friction, velocity]
+# springValues = [tension, friction, velocity]
 
 # defaults
 t = tension.value
 f = friction.value
 v = velocity.value
 
+springCurve = "spring(#{t}, #{f}, #{v})"
 
 
+		
+		
 # -----------------------------
 # left side: presets (pages)
 # -----------------------------
@@ -473,5 +487,15 @@ right.on "change:currentPage", ->
 	opacityTarget.states.switch("default")
 	
 
+for i in sliders
+	i.on "change:value", ->
+		if this is tension then t = Math.round(tension.value)
+		if this is friction then f = Math.round(friction.value)
+		if this is velocity then v = Math.round(velocity.value)
 
-	
+		springCurve = "spring(#{t}, #{f}, #{v})"
+		
+	i.knob.on Events.DragEnd, ->
+		for i in interactionsTargets
+			i.states.animationOptions = curve: springCurve
+		print springCurve
