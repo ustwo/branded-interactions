@@ -435,7 +435,8 @@ presets.on "change:currentPage", ->
 	else if presets.currentPage is slow
 		for i in interactionsTargets
 			i.states.animationOptions = slowSpeed
-		presetsMask.style = presetsMaskStyle		
+		presetsMask.style = presetsMaskStyle
+			
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
 			i.states.animationOptions = smoothSpeed
@@ -468,7 +469,7 @@ presets.on "change:currentPage", ->
 	
 	# reflect changes on right
 	for i in interactionsTargets
-		i.states.animationOptions = curve: springCurve
+# 		i.states.animationOptions = curve: springCurve
 		i.states.next()
 			
 		
