@@ -3,11 +3,16 @@
 # ------------------------------------------------------
 # overall setup
 # ------------------------------------------------------
+# modules
+module = require "colourTransition"
+
+
+
 # colours used throughout
 mint = "rgba(45, 215, 170, 1)"
 mint0 = "rgba(45, 215, 170, 0)"
-aqua = "#28affa"
-purple = "#877DD7"
+aqua = "rgba(40, 175, 250, 1)"
+purple = "rgba(135, 125, 215, 1)"
 grey = "#333333"
 dark = "#222222"
 white = "#FFFFFF"
@@ -165,22 +170,23 @@ springCurve = "spring(#{t}, #{f}, #{v})"
 # -----------------------------
 presets = new PageComponent 
 	midX: sliderHolder.midX, maxY: sliderHolder.y - 50
-	width: sliderHolder.width * 1.05
+# 	width: sliderHolder.width * 1.05
+	width: sliderHolder.width
 	height: 100
 	scrollVertical: false
 	superLayer: left
-
-presetsMaskStyle = "background": "-webkit-linear-gradient(left, #{mint} 2%, #{mint0} 4%, #{mint0} 96%, #{mint} 98%)"
-
-presetsMaskStyleRight = "background": "-webkit-linear-gradient(left, #{mint0} 96%, #{mint} 98%)"
-
-presetsMaskStyleLeft = "background": "-webkit-linear-gradient(left, #{mint} 2%, #{mint0} 4%)"
-
-presetsMask = new Layer
-	width: presets.width, height: presets.height
-	midX: presets.midX, y: presets.y
-	style: presetsMaskStyle
-	superLayer: left
+# 
+# presetsMaskStyle = "background": "-webkit-linear-gradient(left, #{mint} 2%, #{mint0} 4%, #{mint0} 96%, #{mint} 98%)"
+# 
+# presetsMaskStyleRight = "background": "-webkit-linear-gradient(left, #{mint0} 96%, #{mint} 98%)"
+# 
+# presetsMaskStyleLeft = "background": "-webkit-linear-gradient(left, #{mint} 2%, #{mint0} 4%)"
+# 
+# presetsMask = new Layer
+# 	width: presets.width, height: presets.height
+# 	midX: presets.midX, y: presets.y
+# 	style: presetsMaskStyle
+# 	superLayer: left
 
 allPresets = []
 # Create layers in a for-loop
@@ -190,7 +196,7 @@ for i in [0...6]
 		width: 150
 		height: 100
 		clip: false
-		x: 180 * i
+		x: 170 * i
 		style: presetStyle
 		borderRadius: 6
 		opacity: 0.3
@@ -483,7 +489,7 @@ presets.on "change:currentPage", ->
 	if presets.currentPage is sluggish
 		for i in interactionsTargets
 			i.states.animationOptions = sluggishSpeed
-		presetsMask.style = presetsMaskStyleRight
+# 		presetsMask.style = presetsMaskStyleRight
 		
 		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
 		
@@ -491,43 +497,51 @@ presets.on "change:currentPage", ->
 	else if presets.currentPage is slow
 		for i in interactionsTargets
 			i.states.animationOptions = slowSpeed
-		presetsMask.style = presetsMaskStyle
+# 		presetsMask.style = presetsMaskStyle
 		
 		updatePresets(slowTension, slowFriction, slowVelocity)
 			
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
 			i.states.animationOptions = smoothSpeed
-		presetsMask.style = presetsMaskStyle		
+# 		presetsMask.style = presetsMaskStyle		
 		updatePresets(smoothTension, smoothFriction, smoothVelocity)
 		
 	else if presets.currentPage is dynamic
 		for i in interactionsTargets
 			i.states.animationOptions = dynamicSpeed
-		presetsMask.style = presetsMaskStyle
+# 		presetsMask.style = presetsMaskStyle
 		
 		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
+		
+		module.colourTransition(left, mint, 0.2, 60)
 		
 	else if presets.currentPage is snappy
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
-		presetsMask.style = presetsMaskStyle
+# 		presetsMask.style = presetsMaskStyle
 		
 		updatePresets(snappyTension, snappyFriction, snappyVelocity)
+		
+		module.colourTransition(left, purple, 0.2, 60)
 		
 	else if presets.currentPage is blitz
 		for i in interactionsTargets
 			i.states.animationOptions = blitzSpeed
-		presetsMask.style = presetsMaskStyleLeft
+# 		presetsMask.style = presetsMaskStyleLeft
 		
 		updatePresets(blitzTension, blitzFriction, blitzVelocity)
+		
+		
 		
 	else # edge-cases, default speed
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
-		presetsMask.style = presetsMaskStyle
+# 		presetsMask.style = presetsMaskStyle
 		
 # 		updatePresets(blitzTension, blitzFriction, blitzVelocity)
+
+		module.colourTransition(left, mint, 0.2, 60)
 	
 	# reflect changes on right
 	for i in interactionsTargets
