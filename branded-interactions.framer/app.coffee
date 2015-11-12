@@ -42,25 +42,40 @@ sluggishTension = 0
 sluggishSpeed = 
 	curve: "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
 
-
 slowVelocity = 10
 slowFriction = 40
 slowTension = 10
 slowSpeed = 
 	curve: "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
 	
+smoothVelocity = 20
+smoothFriction = 50
+smoothTension = 1
 smoothSpeed = 
-	time: 2
-	curve: "ease-in-out"
+	curve: "spring(#{smoothVelocity}, #{smoothFriction}, #{smoothTension})"
+	
+dynamicVelocity = 120
+dynamicFriction = 20
+dynamicTension = 0
 dynamicSpeed = 
-	curve: "spring(120, 20, 0)"	
+	curve: "spring(#{dynamicVelocity}, #{dynamicFriction}, #{dynamicTension})"
+	
+snappyVelocity = 600
+snappyFriction = 30
+snappyTension = 0
 snappySpeed = 
-	curve: "spring(600, 30, 0)"
-blitzSpeed = 
-	curve: "spring(620, 20, 0)"
+	curve: "spring(#{snappyVelocity}, #{snappyFriction}, #{snappyTension})"
 
-# default to snappySpeed
-Framer.Defaults.Animation = snappySpeed
+blitzVelocity = 620
+blitzFriction = 20
+blitzTension = 10
+blitzSpeed = 
+	curve: "spring(#{blitzVelocity}, #{blitzFriction}, #{blitzTension})"
+
+# default to an independent speed
+Framer.Defaults.Animation =
+	time: 0.3
+	curve: "ease"
 
 # bg layer
 bg = new BackgroundLayer
@@ -144,8 +159,6 @@ v = velocity.value
 
 springCurve = "spring(#{t}, #{f}, #{v})"
 
-
-		
 		
 # -----------------------------
 # left side: presets (pages)
@@ -215,6 +228,8 @@ right = new PageComponent
 	width: Screen.width/2, height: Screen.height
 	scrollVertical: false
 	backgroundColor: grey
+	velocityThreshold: 2
+right.directionLock = true
 	
 # array that will store our right page layers
 rightPages = []
@@ -432,6 +447,10 @@ resetStates = ->
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
 	
+updatePresets = (t, f, v) ->
+	tension.animate properties: value: t
+	friction.animate properties: value: f
+	velocity.animate properties: value: v
 	
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -466,9 +485,7 @@ presets.on "change:currentPage", ->
 			i.states.animationOptions = sluggishSpeed
 		presetsMask.style = presetsMaskStyleRight
 		
-		velocity.animate properties: value: sluggishVelocity
-		friction.animate properties: value: sluggishFriction
-		tension.animate properties: value: sluggishTension
+		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
 		
 		
 	else if presets.currentPage is slow
@@ -476,33 +493,41 @@ presets.on "change:currentPage", ->
 			i.states.animationOptions = slowSpeed
 		presetsMask.style = presetsMaskStyle
 		
-		velocity.animate properties: value: slowVelocity
-		friction.animate properties: value: slowFriction
-		tension.animate properties: value: slowTension
+		updatePresets(slowTension, slowFriction, slowVelocity)
 			
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
 			i.states.animationOptions = smoothSpeed
 		presetsMask.style = presetsMaskStyle		
+		updatePresets(smoothTension, smoothFriction, smoothVelocity)
+		
 	else if presets.currentPage is dynamic
 		for i in interactionsTargets
 			i.states.animationOptions = dynamicSpeed
 		presetsMask.style = presetsMaskStyle
+		
+		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 		
 	else if presets.currentPage is snappy
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
 		presetsMask.style = presetsMaskStyle
 		
+		updatePresets(snappyTension, snappyFriction, snappyVelocity)
+		
 	else if presets.currentPage is blitz
 		for i in interactionsTargets
 			i.states.animationOptions = blitzSpeed
 		presetsMask.style = presetsMaskStyleLeft
 		
+		updatePresets(blitzTension, blitzFriction, blitzVelocity)
+		
 	else # edge-cases, default speed
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
 		presetsMask.style = presetsMaskStyle
+		
+# 		updatePresets(blitzTension, blitzFriction, blitzVelocity)
 	
 	# reflect changes on right
 	for i in interactionsTargets
