@@ -35,11 +35,20 @@ presetStyle =
 # 	"padding": "10pt 60pt"
 	"background-color": black20
 
-# animation presents
+# animation presets
+sluggishVelocity = 120
+sluggishFriction = 20
+sluggishTension = 0
 sluggishSpeed = 
-	curve: "spring(120, 20, 0)"
+	curve: "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
+
+
+slowVelocity = 10
+slowFriction = 40
+slowTension = 10
 slowSpeed = 
-	curve: "spring(120, 20, 0)"
+	curve: "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
+	
 smoothSpeed = 
 	time: 2
 	curve: "ease-in-out"
@@ -411,10 +420,35 @@ iphoneTarget.states.add
 iphoneTarget.on Events.Click, ->
 	iphoneTarget.states.next()
 
+
+
+# ------------------------------------------------------
+# functions etc
+# ------------------------------------------------------
+
+resetStates = ->
+	scaleTarget.states.switch("default")
+	# rotateTarget.states.switch("default")
+	positionTarget.states.switch("default")
+	opacityTarget.states.switch("default")
+	
 	
 # ------------------------------------------------------
-# left side: changes
+# left side: sliders changes, presets changes
 # ------------------------------------------------------
+for i in sliders
+	i.on "change:value", ->
+		if this is tension then t = Math.round(tension.value)
+		if this is friction then f = Math.round(friction.value)
+		if this is velocity then v = Math.round(velocity.value)
+
+		springCurve = "spring(#{t}, #{f}, #{v})"
+		
+	i.knob.on Events.DragEnd, ->
+		for i in interactionsTargets
+			i.states.animationOptions = curve: springCurve
+			i.states.next()
+			
 presets.on "change:currentPage", ->
 	# animate out previousPage
 	presets.previousPage.animate 
@@ -432,10 +466,19 @@ presets.on "change:currentPage", ->
 			i.states.animationOptions = sluggishSpeed
 		presetsMask.style = presetsMaskStyleRight
 		
+		velocity.animate properties: value: sluggishVelocity
+		friction.animate properties: value: sluggishFriction
+		tension.animate properties: value: sluggishTension
+		
+		
 	else if presets.currentPage is slow
 		for i in interactionsTargets
 			i.states.animationOptions = slowSpeed
 		presetsMask.style = presetsMaskStyle
+		
+		velocity.animate properties: value: slowVelocity
+		friction.animate properties: value: slowFriction
+		tension.animate properties: value: slowTension
 			
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
@@ -460,12 +503,6 @@ presets.on "change:currentPage", ->
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
 		presetsMask.style = presetsMaskStyle
-			
-	# reset states
-# 	scaleTarget.states.switch("default")
-# 	# rotateTarget.states.switch("default")
-# 	positionTarget.states.switch("default")
-# 	opacityTarget.states.switch("default")
 	
 	# reflect changes on right
 	for i in interactionsTargets
@@ -487,22 +524,6 @@ right.on "change:currentPage", ->
 	rightCurrent = right.horizontalPageIndex(right.currentPage)
 	rightIndicators[rightCurrent].states.switch("active")
 	
-	# reset states
-	scaleTarget.states.switch("default")
-	# rotateTarget.states.switch("default")
-	positionTarget.states.switch("default")
-	opacityTarget.states.switch("default")
-	
+	# put back all the squares etc to default state
+	resetStates()
 
-for i in sliders
-	i.on "change:value", ->
-		if this is tension then t = Math.round(tension.value)
-		if this is friction then f = Math.round(friction.value)
-		if this is velocity then v = Math.round(velocity.value)
-
-		springCurve = "spring(#{t}, #{f}, #{v})"
-		
-	i.knob.on Events.DragEnd, ->
-		for i in interactionsTargets
-			i.states.animationOptions = curve: springCurve
-			i.states.next()
