@@ -497,5 +497,5 @@ for i in sliders
 		
 	i.knob.on Events.DragEnd, ->
 		for i in interactionsTargets
-			i.states.animationOptions = springCurve
+			i.states.animationOptions = curve: springCurve
 		print springCurve
