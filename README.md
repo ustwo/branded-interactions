@@ -11,3 +11,5 @@ An interal prototyping tool that allows clients to manipulate and save a series 
 - [ ] Update and add in-device examples (menus etc)
 - [ ] Better custom settings
 - [ ] Save, edit, export functionality on custom settings
+- [ ] Module-out as much as possible
+- [ ] Condense rest of code (functions, arrays, all that good stuff)
