@@ -102,6 +102,7 @@ for i in [0..2]
 		min: 0, max: 1, value: 0.5
 		pixelAlign: true
 		superLayer: sliderCanvas
+	slider.knob.draggable.momentum = false
 	slider.fill.backgroundColor = white80
 	sliders.push(slider)
 
@@ -460,10 +461,15 @@ presets.on "change:currentPage", ->
 		presetsMask.style = presetsMaskStyle
 			
 	# reset states
-	scaleTarget.states.switch("default")
-	# rotateTarget.states.switch("default")
-	positionTarget.states.switch("default")
-	opacityTarget.states.switch("default")
+# 	scaleTarget.states.switch("default")
+# 	# rotateTarget.states.switch("default")
+# 	positionTarget.states.switch("default")
+# 	opacityTarget.states.switch("default")
+	
+	# reflect changes on right
+	for i in interactionsTargets
+		i.states.animationOptions = curve: springCurve
+		i.states.next()
 			
 		
 for i in allPresets
@@ -498,4 +504,4 @@ for i in sliders
 	i.knob.on Events.DragEnd, ->
 		for i in interactionsTargets
 			i.states.animationOptions = curve: springCurve
-		print springCurve
+			i.states.next()
