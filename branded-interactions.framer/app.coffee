@@ -38,7 +38,7 @@ slowFill = honey
 smoothFill = ohra
 dynamicFill = pot
 snappyFill = blu
-blitzFill = rain
+blitzFill = mare
 
 # greyscale tones
 nonwhite = "rgba(248, 248, 248, 1)"
@@ -86,9 +86,9 @@ smoothTension = 1
 smoothSpeed = 
 	curve: "spring(#{smoothVelocity}, #{smoothFriction}, #{smoothTension})"
 	
-dynamicVelocity = 120
-dynamicFriction = 20
-dynamicTension = 0
+dynamicVelocity = 663
+dynamicFriction = 76
+dynamicTension = 18
 dynamicSpeed = 
 	curve: "spring(#{dynamicVelocity}, #{dynamicFriction}, #{dynamicTension})"
 	
@@ -167,15 +167,16 @@ tension = sliders[0]
 friction = sliders[1]
 velocity = sliders[2]
 
-# adjust values for each specific part
+# adjust maximum values for each,
+# make value exactly half as a generic starting point
 tension.max = 1000
 tension.value = 500
 
 friction.max = 100
-friction.value = 25
+friction.value = 50
 
 velocity.max = 100
-velocity.value = 0
+velocity.value = 50
 
 
 # -----------------------------
@@ -191,7 +192,6 @@ v = velocity.value
 
 springCurve = "spring(#{t}, #{f}, #{v})"
 
-		
 # -----------------------------
 # left side: presets (pages)
 # -----------------------------
@@ -455,19 +455,27 @@ iphoneTarget.states.add
 	
 iphoneTarget.on Events.Click, ->
 	iphoneTarget.states.next()
-
-# ------------------------------------------------------
-# functions etc
-# ------------------------------------------------------
-
-resetStates = ->
-	for i in interactionsTargets
-		i.states.switch("default")
 	
+# ------------------------------------------------------
+# overall functions, settings
+# ------------------------------------------------------
+# default to the first speed value
+for i in interactionsTargets
+	i.states.animationOptions = dynamicSpeed
+
+# function for moving the sliders	
 updatePresets = (t, f, v) ->
 	tension.animate properties: value: t
 	friction.animate properties: value: f
 	velocity.animate properties: value: v
+	
+# default to first speed value
+updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
+
+# function for reseting all interactive states
+resetStates = ->
+	for i in interactionsTargets
+		i.states.switch("default")
 	
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
