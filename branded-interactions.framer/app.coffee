@@ -6,8 +6,6 @@
 # modules
 module = require "colourTransition"
 
-
-
 # colours used throughout
 mint = "rgba(45, 215, 170, 1)"
 # mint0 = "rgba(45, 215, 170, 0)"
@@ -25,8 +23,8 @@ transparent = "rgba(0, 0, 0, 0)"
 piglet = "rgba(237, 0, 130, 1)"
 passion = "rgba(230, 12, 41, 1)"
 ohra = "rgba(255, 85, 25, 1)"
-honey = "rgba(255, 191, 0, 1)" 
-jeezz = "rgba(150, 204, 141, 1)" 
+honey = "rgba(255, 191, 0, 1)"
+jeezz = "rgba(150, 204, 141, 1)"
 pot = "rgba(20, 192, 77, 1)"
 mare = "rgba(22, 213, 217, 1)"
 blu = "rgba(0, 156, 243, 1)"
@@ -49,15 +47,15 @@ grey04 = "rgba(100, 100, 100, 1)"
 nonblack = "rgba(51, 51, 51, 1)"
 
 # styles
-squareStyle = 
+squareStyle =
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
 	"line-height": "600px"
 	"text-align": "center"
 	"text-transform": "uppercase"
 	"color": black50
-	
-presetStyle = 
+
+presetStyle =
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
 	"line-height": "100px"
@@ -71,37 +69,37 @@ presetStyle =
 sluggishVelocity = 120
 sluggishFriction = 20
 sluggishTension = 0
-sluggishSpeed = 
+sluggishSpeed =
 	curve: "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
 
 slowVelocity = 10
 slowFriction = 40
 slowTension = 10
-slowSpeed = 
+slowSpeed =
 	curve: "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
-	
+
 smoothVelocity = 20
 smoothFriction = 50
 smoothTension = 1
-smoothSpeed = 
+smoothSpeed =
 	curve: "spring(#{smoothVelocity}, #{smoothFriction}, #{smoothTension})"
-	
+
 dynamicVelocity = 663
 dynamicFriction = 76
 dynamicTension = 18
-dynamicSpeed = 
+dynamicSpeed =
 	curve: "spring(#{dynamicVelocity}, #{dynamicFriction}, #{dynamicTension})"
-	
+
 snappyVelocity = 600
 snappyFriction = 30
 snappyTension = 0
-snappySpeed = 
+snappySpeed =
 	curve: "spring(#{snappyVelocity}, #{snappyFriction}, #{snappyTension})"
 
 blitzVelocity = 620
 blitzFriction = 20
 blitzTension = 10
-blitzSpeed = 
+blitzSpeed =
 	curve: "spring(#{blitzVelocity}, #{blitzFriction}, #{blitzTension})"
 
 # default to an independent speed
@@ -125,7 +123,7 @@ left = new Layer
 # left side: slider
 # -----------------------------
 sliderWidth = left.width/2
-sliderSize = 
+sliderSize =
 	width: sliderWidth
 	height: 24
 sliderGutter = sliderSize.height * 5
@@ -145,7 +143,7 @@ sliderHolder = new Layer
 	backgroundColor: white20
 	superLayer: left
 sliderCanvas.bringToFront()
-	
+
 # array that will store our right page layers
 sliders = []
 
@@ -195,7 +193,7 @@ springCurve = "spring(#{t}, #{f}, #{v})"
 # -----------------------------
 # left side: presets (pages)
 # -----------------------------
-presets = new PageComponent 
+presets = new PageComponent
 	midX: sliderHolder.midX, maxY: sliderHolder.y - 50
 # 	width: sliderHolder.width * 1.05
 	width: sliderHolder.width
@@ -206,7 +204,7 @@ presets = new PageComponent
 allPresets = []
 # Create layers in a for-loop
 for i in [0...6]
-	preset = new Layer 
+	preset = new Layer
 		superLayer: presets.content
 		width: 150
 		height: 100
@@ -216,7 +214,7 @@ for i in [0...6]
 		borderRadius: 6
 		opacity: 0.3
 	allPresets.push(preset)
-	
+
 allPresets[0].html = "sluggish"
 allPresets[0].name = "sluggish"
 sluggish = allPresets[0]
@@ -250,47 +248,47 @@ right = new PageComponent
 	scrollVertical: false
 	backgroundColor: nonblack
 	velocityThreshold: 2
-right.directionLock = true
-	
+
+
 # array that will store our right page layers
 rightPages = []
 
 # array that will store our right indicator layers
-rightIndicators = []	
+rightIndicators = []
 rightIndicatorsAmount = 3
 rightIndicatorsSize = 12
 
 # generate page and indicator layers
 for i in [0...rightIndicatorsAmount]
-	rightPage = new Layer 
+	rightPage = new Layer
 		width: right.width, height: right.height
 		x: right.width * i, superLayer: right.content
 		backgroundColor: null
-		
+
 	# store right page layers in an array
 	rightPages.push(rightPage)
-		
-	indicator = new Layer 
+
+	indicator = new Layer
 		backgroundColor: white
 		width: rightIndicatorsSize, height: rightIndicatorsSize
 		x: 28 * i, y: right.maxY - 100
 		borderRadius: "50%", opacity: 0.2
 		superLayer: right
-		
+
 	# Stay centered regardless of the amount of cards
 	indicator.x += (right.width / 2) - (rightIndicatorsSize * rightIndicatorsAmount)
-	
+
 	# States
 	indicator.states.add active: opacity: 0.8, scale:1.2
 	indicator.states.animationOptions = time: 0.5
-	
+
 	# Store indicators in our array
 	rightIndicators.push(indicator)
 
 # set indicator for our current right page
 rightCurrent = right.horizontalPageIndex(right.currentPage)
 rightIndicators[rightCurrent].states.switch("active")
-	
+
 # rename for easy access
 rightOne = rightPages[0]
 rightTwo = rightPages[1]
@@ -300,7 +298,7 @@ rightThree = rightPages[2]
 # right side: basic interactions
 # -----------------------------
 squareSize = right.width/3
-boundsSize = 
+boundsSize =
 	width: squareSize
 	height: squareSize
 gutter = boundsSize.width*0.2
@@ -312,7 +310,7 @@ squareCanvas = new Layer
 	backgroundColor: null
 	superLayer: rightOne
 	clip: false
-	
+
 interactions = []
 rows = 2
 cols = 2
@@ -328,7 +326,7 @@ cols = 2
 			clip: false
 			style: squareStyle
 			superLayer: squareCanvas
-				
+
 		interactions.push(i)
 
 # rename these layers to make them handy
@@ -375,14 +373,14 @@ rotateTarget = new Layer
 	backgroundColor: white80
 	borderRadius: 24
 	superLayer: rotate
-interactionsTargets.push(rotateTarget)	
-	
+interactionsTargets.push(rotateTarget)
+
 rotateTarget.states.add
 	last: rotation: 90, borderRadius: 12
 
 rotate.on Events.Click, ->
 	rotateTarget.states.next()
-	
+
 # -----------------------------
 # position
 positionTarget = new Layer
@@ -391,7 +389,7 @@ positionTarget = new Layer
 	backgroundColor: white80
 	borderRadius: 24
 	superLayer: position
-interactionsTargets.push(positionTarget)	
+interactionsTargets.push(positionTarget)
 
 positionTarget.states.add
 	first: x: positionTarget.x - boundsSize.width/4
@@ -411,7 +409,7 @@ opacityTargetTop = new Layer
 	borderColor: white80
 	borderRadius: 24
 	superLayer: opacity
-	
+
 opacityTarget = new Layer
 	size: boundsSize
 	scale: 0.5
@@ -422,10 +420,10 @@ interactionsTargets.push(opacityTarget)
 
 opacityTarget.states.add
 	last: opacity: 0
-	
+
 opacity.on Events.Click, ->
 	opacityTarget.states.next()
-	
+
 
 # -----------------------------
 # right side: iphone #1
@@ -435,7 +433,7 @@ iphone = new Layer
 	width: 994, height: 2028
 	scale: 0.5, opacity: 0.2
 	image: "images/iphone.png"
-	superLayer: rightTwo 
+	superLayer: rightTwo
 
 iphoneTarget = new Layer
 	width: boundsSize.width, height: boundsSize.height/2
@@ -452,10 +450,10 @@ iphoneTarget.states.add
 		opacity: 0.6, maxY: 1000, width: (boundsSize.width + 100), midX: (rightOne.width/2)
 	second: rotation: 90
 	last: scale: 2
-	
+
 iphoneTarget.on Events.Click, ->
 	iphoneTarget.states.next()
-	
+
 # ------------------------------------------------------
 # overall functions, settings
 # ------------------------------------------------------
@@ -463,12 +461,12 @@ iphoneTarget.on Events.Click, ->
 for i in interactionsTargets
 	i.states.animationOptions = dynamicSpeed
 
-# function for moving the sliders	
+# function for moving the sliders
 updatePresets = (t, f, v) ->
 	tension.animate properties: value: t
 	friction.animate properties: value: f
 	velocity.animate properties: value: v
-	
+
 # default to first speed value
 updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 
@@ -476,7 +474,7 @@ updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 resetStates = ->
 	for i in interactionsTargets
 		i.states.switch("default")
-	
+
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
 # ------------------------------------------------------
@@ -487,64 +485,64 @@ for i in sliders
 		if this is velocity then v = Math.round(velocity.value)
 
 		springCurve = "spring(#{t}, #{f}, #{v})"
-		
+
 	i.knob.on Events.DragEnd, ->
 		for i in interactionsTargets
 			i.states.animationOptions = curve: springCurve
 			i.states.next()
-			
+
 presets.on "change:currentPage", ->
 	# animate out previousPage
-	presets.previousPage.animate 
+	presets.previousPage.animate
 		properties:
 			opacity: 0.3
 		time: 0.4
 	# animate in new currentPage
-	presets.currentPage.animate 
+	presets.currentPage.animate
 		properties:
 			opacity: 1
 		time: 0.4
-	
+
 	bgSwitchSpeed = 0.2
 	bgSwitchFrameRate = 60
-		
+
 	if presets.currentPage is sluggish
 		for i in interactionsTargets
 			i.states.animationOptions = sluggishSpeed
 		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
 		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
-		
+
 	else if presets.currentPage is slow
 		for i in interactionsTargets
 			i.states.animationOptions = slowSpeed
 		updatePresets(slowTension, slowFriction, slowVelocity)
 		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
-			
+
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
 			i.states.animationOptions = smoothSpeed
 		updatePresets(smoothTension, smoothFriction, smoothVelocity)
 		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
-		
+
 	else if presets.currentPage is dynamic
 		for i in interactionsTargets
 			i.states.animationOptions = dynamicSpeed
 		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
 		springCurve.curve = dynamicSpeed
-		
+
 	else if presets.currentPage is snappy
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
 		updatePresets(snappyTension, snappyFriction, snappyVelocity)
 		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
-		
+
 	else if presets.currentPage is blitz
 		for i in interactionsTargets
 			i.states.animationOptions = blitzSpeed
 		updatePresets(blitzTension, blitzFriction, blitzVelocity)
 		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
-		
+
 	else # edge-cases, default speed
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
@@ -554,8 +552,8 @@ presets.on "change:currentPage", ->
 	for i in interactionsTargets
 # 		i.states.animationOptions = curve: springCurve
 		i.states.next()
-			
-		
+
+
 for i in allPresets
 	i.on Events.Click, ->
 		presets.snapToPage(this)
@@ -569,7 +567,7 @@ right.on "change:currentPage", ->
 	# Update indicators: update new
 	rightCurrent = right.horizontalPageIndex(right.currentPage)
 	rightIndicators[rightCurrent].states.switch("active")
-	
+
 	# put back all the squares etc to default state
 	resetStates()
 
