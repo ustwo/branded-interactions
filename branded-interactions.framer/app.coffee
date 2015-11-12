@@ -48,9 +48,6 @@ grey03 = "rgba(150, 150, 150, 1)"
 grey04 = "rgba(100, 100, 100, 1)"
 nonblack = "rgba(51, 51, 51, 1)"
 
-
-
-
 # styles
 squareStyle = 
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
@@ -459,17 +456,13 @@ iphoneTarget.states.add
 iphoneTarget.on Events.Click, ->
 	iphoneTarget.states.next()
 
-
-
 # ------------------------------------------------------
 # functions etc
 # ------------------------------------------------------
 
 resetStates = ->
-	scaleTarget.states.switch("default")
-	# rotateTarget.states.switch("default")
-	positionTarget.states.switch("default")
-	opacityTarget.states.switch("default")
+	for i in interactionsTargets
+		i.states.switch("default")
 	
 updatePresets = (t, f, v) ->
 	tension.animate properties: value: t
