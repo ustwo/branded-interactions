@@ -35,15 +35,20 @@ presetStyle =
 # 	"padding": "10pt 60pt"
 	"background-color": black20
 
-# animation presents
+# animation presets
 sluggishVelocity = 120
 sluggishFriction = 20
 sluggishTension = 0
-
 sluggishSpeed = 
 	curve: "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
+
+
+slowVelocity = 10
+slowFriction = 40
+slowTension = 10
 slowSpeed = 
-	curve: "spring(120, 20, 0)"
+	curve: "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
+	
 smoothSpeed = 
 	time: 2
 	curve: "ease-in-out"
@@ -427,6 +432,7 @@ resetStates = ->
 	positionTarget.states.switch("default")
 	opacityTarget.states.switch("default")
 	
+	
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
 # ------------------------------------------------------
@@ -469,6 +475,10 @@ presets.on "change:currentPage", ->
 		for i in interactionsTargets
 			i.states.animationOptions = slowSpeed
 		presetsMask.style = presetsMaskStyle
+		
+		velocity.animate properties: value: slowVelocity
+		friction.animate properties: value: slowFriction
+		tension.animate properties: value: slowTension
 			
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
@@ -514,5 +524,6 @@ right.on "change:currentPage", ->
 	rightCurrent = right.horizontalPageIndex(right.currentPage)
 	rightIndicators[rightCurrent].states.switch("active")
 	
+	# put back all the squares etc to default state
 	resetStates()
 
