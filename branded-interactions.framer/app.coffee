@@ -10,10 +10,9 @@ module = require "colourTransition"
 
 # colours used throughout
 mint = "rgba(45, 215, 170, 1)"
-mint0 = "rgba(45, 215, 170, 0)"
+# mint0 = "rgba(45, 215, 170, 0)"
 aqua = "rgba(40, 175, 250, 1)"
 purple = "rgba(135, 125, 215, 1)"
-grey = "#333333"
 dark = "#222222"
 white = "#FFFFFF"
 white80 = "rgba(255, 255, 255, 0.8)"
@@ -21,7 +20,38 @@ white20 = "rgba(255, 255, 255, 0.2)"
 black50 = "rgba(0, 0, 0, 0.5)"
 black20 = "rgba(0, 0, 0, 0.2)"
 transparent = "rgba(0, 0, 0, 0)"
-# style
+
+# bright colours
+piglet = "rgba(237, 0, 130, 1)"
+passion = "rgba(230, 12, 41, 1)"
+ohra = "rgba(255, 85, 25, 1)"
+honey = "rgba(255, 191, 0, 1)" 
+jeezz = "rgba(150, 204, 141, 1)" 
+pot = "rgba(20, 192, 77, 1)"
+mare = "rgba(22, 213, 217, 1)"
+blu = "rgba(0, 156, 243, 1)"
+navy = "rgba(20, 63, 204, 1)"
+rain = "rgba(97, 20, 204, 1)"
+
+sluggishFill = piglet
+slowFill = honey
+smoothFill = ohra
+dynamicFill = pot
+snappyFill = blu
+blitzFill = rain
+
+# greyscale tones
+nonwhite = "rgba(248, 248, 248, 1)"
+grey01 = "rgba(234, 234, 234, 1)"
+grey02 = "rgba(191, 191, 191, 1)"
+grey03 = "rgba(150, 150, 150, 1)"
+grey04 = "rgba(100, 100, 100, 1)"
+nonblack = "rgba(51, 51, 51, 1)"
+
+
+
+
+# styles
 squareStyle = 
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
@@ -84,7 +114,7 @@ Framer.Defaults.Animation =
 
 # bg layer
 bg = new BackgroundLayer
-	backgroundColor: grey
+	backgroundColor: nonblack
 
 
 # ------------------------------------------------------
@@ -92,7 +122,7 @@ bg = new BackgroundLayer
 # ------------------------------------------------------
 left = new Layer
 	width: Screen.width/2, height: Screen.height
-	backgroundColor: mint
+	backgroundColor: pot # match first present colour
 
 # -----------------------------
 # left side: slider
@@ -175,18 +205,6 @@ presets = new PageComponent
 	height: 100
 	scrollVertical: false
 	superLayer: left
-# 
-# presetsMaskStyle = "background": "-webkit-linear-gradient(left, #{mint} 2%, #{mint0} 4%, #{mint0} 96%, #{mint} 98%)"
-# 
-# presetsMaskStyleRight = "background": "-webkit-linear-gradient(left, #{mint0} 96%, #{mint} 98%)"
-# 
-# presetsMaskStyleLeft = "background": "-webkit-linear-gradient(left, #{mint} 2%, #{mint0} 4%)"
-# 
-# presetsMask = new Layer
-# 	width: presets.width, height: presets.height
-# 	midX: presets.midX, y: presets.y
-# 	style: presetsMaskStyle
-# 	superLayer: left
 
 allPresets = []
 # Create layers in a for-loop
@@ -233,7 +251,7 @@ right = new PageComponent
 	x: Screen.width/2
 	width: Screen.width/2, height: Screen.height
 	scrollVertical: false
-	backgroundColor: grey
+	backgroundColor: nonblack
 	velocityThreshold: 2
 right.directionLock = true
 	
@@ -485,64 +503,51 @@ presets.on "change:currentPage", ->
 		properties:
 			opacity: 1
 		time: 0.4
+	
+	bgSwitchSpeed = 0.2
+	bgSwitchFrameRate = 60
 		
 	if presets.currentPage is sluggish
 		for i in interactionsTargets
 			i.states.animationOptions = sluggishSpeed
-# 		presetsMask.style = presetsMaskStyleRight
-		
 		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
-		
+		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
 		
 	else if presets.currentPage is slow
 		for i in interactionsTargets
 			i.states.animationOptions = slowSpeed
-# 		presetsMask.style = presetsMaskStyle
-		
 		updatePresets(slowTension, slowFriction, slowVelocity)
+		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
 			
 	else if presets.currentPage is smooth
 		for i in interactionsTargets
 			i.states.animationOptions = smoothSpeed
-# 		presetsMask.style = presetsMaskStyle		
 		updatePresets(smoothTension, smoothFriction, smoothVelocity)
+		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
 		
 	else if presets.currentPage is dynamic
 		for i in interactionsTargets
 			i.states.animationOptions = dynamicSpeed
-# 		presetsMask.style = presetsMaskStyle
-		
 		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
-		
-		module.colourTransition(left, mint, 0.2, 60)
+		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
 		
 	else if presets.currentPage is snappy
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
-# 		presetsMask.style = presetsMaskStyle
-		
 		updatePresets(snappyTension, snappyFriction, snappyVelocity)
-		
-		module.colourTransition(left, purple, 0.2, 60)
+		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
 		
 	else if presets.currentPage is blitz
 		for i in interactionsTargets
 			i.states.animationOptions = blitzSpeed
-# 		presetsMask.style = presetsMaskStyleLeft
-		
 		updatePresets(blitzTension, blitzFriction, blitzVelocity)
-		
-		
+		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
 		
 	else # edge-cases, default speed
 		for i in interactionsTargets
 			i.states.animationOptions = snappySpeed
-# 		presetsMask.style = presetsMaskStyle
-		
-# 		updatePresets(blitzTension, blitzFriction, blitzVelocity)
+		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
 
-		module.colourTransition(left, mint, 0.2, 60)
-	
 	# reflect changes on right
 	for i in interactionsTargets
 # 		i.states.animationOptions = curve: springCurve
