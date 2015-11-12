@@ -531,6 +531,7 @@ presets.on "change:currentPage", ->
 			i.states.animationOptions = dynamicSpeed
 		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		springCurve.curve = dynamicSpeed
 		
 	else if presets.currentPage is snappy
 		for i in interactionsTargets
@@ -572,3 +573,5 @@ right.on "change:currentPage", ->
 	# put back all the squares etc to default state
 	resetStates()
 
+Utils.interval 0.5, ->
+	print springCurve
