@@ -6,12 +6,9 @@
 # modules
 module = require "colourTransition"
 
-# colours used throughout
-mint = "rgba(45, 215, 170, 1)"
-# mint0 = "rgba(45, 215, 170, 0)"
-aqua = "rgba(40, 175, 250, 1)"
-purple = "rgba(135, 125, 215, 1)"
-dark = "#222222"
+# document.body.style.cursor = "auto"
+
+# custom colours
 white = "#FFFFFF"
 white80 = "rgba(255, 255, 255, 0.8)"
 white20 = "rgba(255, 255, 255, 0.2)"
@@ -19,7 +16,7 @@ black50 = "rgba(0, 0, 0, 0.5)"
 black20 = "rgba(0, 0, 0, 0.2)"
 transparent = "rgba(0, 0, 0, 0)"
 
-# bright colours
+# ustwo colours
 piglet = "rgba(237, 0, 130, 1)"
 passion = "rgba(230, 12, 41, 1)"
 ohra = "rgba(255, 85, 25, 1)"
@@ -66,41 +63,29 @@ presetStyle =
 	"background-color": black20
 
 # animation presets
-sluggishVelocity = 120
-sluggishFriction = 20
-sluggishTension = 0
-sluggishSpeed =
-	curve: "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
+sluggishTension = 20
+sluggishFriction = 30
+sluggishVelocity = 0
 
-slowVelocity = 10
-slowFriction = 40
-slowTension = 10
-slowSpeed =
-	curve: "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
+slowTension = 50
+slowFriction = 15
+slowVelocity = 0
 
-smoothVelocity = 20
-smoothFriction = 50
-smoothTension = 1
-smoothSpeed =
-	curve: "spring(#{smoothVelocity}, #{smoothFriction}, #{smoothTension})"
+smoothTension = 120
+smoothFriction = 20
+smoothVelocity = 0
 
-dynamicVelocity = 663
+dynamicTension = 663
 dynamicFriction = 76
-dynamicTension = 18
-dynamicSpeed =
-	curve: "spring(#{dynamicVelocity}, #{dynamicFriction}, #{dynamicTension})"
+dynamicVelocity = 18
 
-snappyVelocity = 600
+snappyTension = 600
 snappyFriction = 30
-snappyTension = 0
-snappySpeed =
-	curve: "spring(#{snappyVelocity}, #{snappyFriction}, #{snappyTension})"
+snappyVelocity = 0
 
-blitzVelocity = 620
+blitzTension = 620
 blitzFriction = 20
-blitzTension = 10
-blitzSpeed =
-	curve: "spring(#{blitzVelocity}, #{blitzFriction}, #{blitzTension})"
+blitzVelocity = 10
 
 # default to an independent speed
 Framer.Defaults.Animation =
@@ -120,7 +105,7 @@ left = new Layer
 	backgroundColor: pot # match first present colour
 
 # -----------------------------
-# left side: slider
+# left side: slider setup
 # -----------------------------
 sliderWidth = left.width/2
 sliderSize =
@@ -137,15 +122,20 @@ sliderCanvas = new Layer
 	clip: false
 
 sliderHolder = new Layer
-	width: sliderCanvas.width * 1.4, height: sliderCanvas.height * 1.8
+	width: sliderCanvas.width * 1.4
+	height: sliderCanvas.height * 1.8
 	midX: sliderCanvas.midX, midY: sliderCanvas.midY
-	borderRadius: 12
+	borderRadius: 8
 	backgroundColor: white20
 	superLayer: left
 sliderCanvas.bringToFront()
 
+
+# -----------------------------
+# left side: sliders
+# -----------------------------
 # array that will store our right page layers
-sliders = []
+allSliders = []
 
 for i in [0..2]
 	slider = new SliderComponent
@@ -153,18 +143,24 @@ for i in [0..2]
 		width: sliderWidth, height: sliderSize.height
 		backgroundColor: white20
 		knobSize: 48
-		min: 0, max: 1, value: 0.5
+		min: 0
+# 		max: 1, value: 0.5
 		pixelAlign: true
 		superLayer: sliderCanvas
+		style: presetStyle
 	slider.knob.draggable.momentum = false
 	slider.fill.backgroundColor = white80
-	sliders.push(slider)
+	allSliders.push(slider)
 
 # rename for easy access
-tension = sliders[0]
-friction = sliders[1]
-velocity = sliders[2]
-
+# "backwards" ordering for less headfuck for user
+# see Noah Levin spring diagram
+velocity = allSliders[0]
+velocity.html = "velocity (wind-up)"
+friction = allSliders[1]
+friction.html = "friction (weight)"
+tension = allSliders[2]
+tension.html = "tension (bounciness)"
 # adjust maximum values for each,
 # make value exactly half as a generic starting point
 tension.max = 1000
@@ -176,26 +172,22 @@ friction.value = 50
 velocity.max = 100
 velocity.value = 50
 
-
 # -----------------------------
 # slider logic: spring
+# default
+springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
-# spring values in an array
-# springValues = [tension, friction, velocity]
-
-# defaults
-t = tension.value
-f = friction.value
-v = velocity.value
-
-springCurve = "spring(#{t}, #{f}, #{v})"
+# custom: dynamic preset (launch preset)
+tension.value = dynamicTension
+friction.value = dynamicFriction
+velocity.value = dynamicVelocity
+springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 # -----------------------------
 # left side: presets (pages)
 # -----------------------------
 presets = new PageComponent
 	midX: sliderHolder.midX, maxY: sliderHolder.y - 50
-# 	width: sliderHolder.width * 1.05
 	width: sliderHolder.width
 	height: 100
 	scrollVertical: false
@@ -249,7 +241,6 @@ right = new PageComponent
 	backgroundColor: nonblack
 	velocityThreshold: 2
 
-	
 # array that will store our right page layers
 rightPages = []
 
@@ -457,35 +448,28 @@ iphoneTarget.on Events.Click, ->
 # ------------------------------------------------------
 # overall functions, settings
 # ------------------------------------------------------
-# default to the first speed value
+# make each in interactionTargets adhere to springCurve
 for i in interactionsTargets
-	i.states.animationOptions = dynamicSpeed
-
-# function for moving the sliders
-updatePresets = (t, f, v) ->
-	tension.animate properties: value: t
-	friction.animate properties: value: f
-	velocity.animate properties: value: v
-
-# default to first speed value
-updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
+	i.states.animationOptions = curve: springCurve
 
 # function for reseting all interactive states
+# on page scrolls etc
 resetStates = ->
 	for i in interactionsTargets
 		i.states.switch("default")
+	
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
 # ------------------------------------------------------
-for i in sliders
+for i in allSliders
 	i.on "change:value", ->
-		if this is tension then t = Math.round(tension.value)
-		if this is friction then f = Math.round(friction.value)
-		if this is velocity then v = Math.round(velocity.value)
+		if this is tension then tension.value = Math.round(tension.value)
+		if this is friction then friction.value = Math.round(friction.value)
+		if this is velocity then velocity.value = Math.round(velocity.value)
 
-		springCurve = "spring(#{t}, #{f}, #{v})"
-
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+# 
 	i.knob.on Events.DragEnd, ->
 		for i in interactionsTargets
 			i.states.animationOptions = curve: springCurve
@@ -507,52 +491,88 @@ presets.on "change:currentPage", ->
 	bgSwitchFrameRate = 60
 
 	if presets.currentPage is sluggish
-		for i in interactionsTargets
-			i.states.animationOptions = sluggishSpeed
-		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
 		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: sluggishTension
+		friction.animate properties: value: sluggishFriction
+		velocity.animate properties: value: sluggishVelocity
+		tension.value = sluggishTension
+		friction.value = sluggishFriction
+		velocity.value = sluggishVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is slow
-		for i in interactionsTargets
-			i.states.animationOptions = slowSpeed
-		updatePresets(slowTension, slowFriction, slowVelocity)
 		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: slowTension
+		friction.animate properties: value: slowFriction
+		velocity.animate properties: value: slowVelocity
+		tension.value = slowTension
+		friction.value = slowFriction
+		velocity.value = slowVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is smooth
-		for i in interactionsTargets
-			i.states.animationOptions = smoothSpeed
-		updatePresets(smoothTension, smoothFriction, smoothVelocity)
 		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: smoothTension
+		friction.animate properties: value: smoothFriction
+		velocity.animate properties: value: smoothVelocity
+		tension.value = smoothTension
+		friction.value = smoothFriction
+		velocity.value = smoothVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is dynamic
-		for i in interactionsTargets
-			i.states.animationOptions = dynamicSpeed
-		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
-		springCurve.curve = dynamicSpeed
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: dynamicTension
+		friction.animate properties: value: dynamicFriction
+		velocity.animate properties: value: dynamicVelocity
+		tension.value = dynamicTension
+		friction.value = dynamicFriction
+		velocity.value = dynamicVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is snappy
-		for i in interactionsTargets
-			i.states.animationOptions = snappySpeed
-		updatePresets(snappyTension, snappyFriction, snappyVelocity)
 		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: snappyTension
+		friction.animate properties: value: snappyFriction
+		velocity.animate properties: value: snappyVelocity
+		tension.value = snappyTension
+		friction.value = snappyFriction
+		velocity.value = snappyVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is blitz
-		for i in interactionsTargets
-			i.states.animationOptions = blitzSpeed
-		updatePresets(blitzTension, blitzFriction, blitzVelocity)
 		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
-
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: blitzTension
+		friction.animate properties: value: blitzFriction
+		velocity.animate properties: value: blitzVelocity
+		tension.value = blitzTension
+		friction.value = blitzFriction
+		velocity.value = blitzVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+	
 	else # edge-cases, default speed
-		for i in interactionsTargets
-			i.states.animationOptions = snappySpeed
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: dynamicTension
+		friction.animate properties: value: dynamicFriction
+		velocity.animate properties: value: dynamicVelocity
+		tension.value = dynamicTension
+		friction.value = dynamicFriction
+		velocity.value = dynamicVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
-	# reflect changes on right
+# 	reflect changes on right
 	for i in interactionsTargets
-# 		i.states.animationOptions = curve: springCurve
+		# push changes in springCurve into states' animation options
+		i.states.animationOptions = curve: springCurve
+		# show this visually with a state change
 		i.states.next()
-
 
 for i in allPresets
 	i.on Events.Click, ->
@@ -571,5 +591,16 @@ right.on "change:currentPage", ->
 	# put back all the squares etc to default state
 	resetStates()
 
-Utils.interval 0.5, ->
-	print springCurve
+
+# ------------------------------------------------------
+# testing
+# ------------------------------------------------------
+# Utils.interval 0.5, ->
+# 	print springCurve
+
+
+
+
+
+
+
