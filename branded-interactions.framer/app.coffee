@@ -67,9 +67,9 @@ sluggishTension = 120
 sluggishFriction = 20
 sluggishVelocity = 0
 
-slowVelocity = 10
-slowFriction = 40
 slowTension = 10
+slowFriction = 40
+slowVelocity = 10
 
 smoothTension = 20
 smoothFriction = 50
@@ -454,17 +454,6 @@ iphoneTarget.on Events.Click, ->
 for i in interactionsTargets
 	i.states.animationOptions = curve: springCurve
 
-# function for moving the sliders
-# updatePresets = (t, f, v) ->
-# 	tension.animate properties: value: t
-# 	friction.animate properties: value: f
-# 	velocity.animate properties: value: v
-# 	springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-	
-# default to first speed value
-# updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
-
-
 # function for reseting all interactive states
 # on page scrolls etc
 resetStates = ->
@@ -503,43 +492,61 @@ presets.on "change:currentPage", ->
 	bgSwitchSpeed = 0.2
 	bgSwitchFrameRate = 60
 
-# 	if presets.currentPage is sluggish
-# 		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
-# 		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
-# 
-# 	else if presets.currentPage is slow
-# 		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
-# 
-# 	else if presets.currentPage is smooth
-# 		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
-# 		updatePresets(smoothTension, smoothFriction, smoothVelocity)
-# 
-# 		
-# 
-	if presets.currentPage is dynamic
+	if presets.currentPage is sluggish
+		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
+		tension.value = sluggishTension
+		friction.value = sluggishFriction
+		velocity.value = sluggishVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+
+	else if presets.currentPage is slow
+		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
+		tension.value = slowTension
+		friction.value = slowFriction
+		velocity.value = slowVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+
+	else if presets.currentPage is smooth
+		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
+		tension.value = smoothTension
+		friction.value = smoothFriction
+		velocity.value = smoothVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+
+	else if presets.currentPage is dynamic
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
 		tension.value = dynamicTension
 		friction.value = dynamicFriction
 		velocity.value = dynamicVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-# 
-	if presets.currentPage is snappy
+
+	else if presets.currentPage is snappy
 		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
 		tension.value = snappyTension
 		friction.value = snappyFriction
 		velocity.value = snappyVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-# 
-# 	else if presets.currentPage is blitz
-# 		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
-# 
-# 	else # edge-cases, default speed
-# 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
 
-	# reflect changes on right
-# 	for i in interactionsTargets
-# 		i.states.next()
+	else if presets.currentPage is blitz
+		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
+		tension.value = blitzTension
+		friction.value = blitzFriction
+		velocity.value = blitzVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+	
+	else # edge-cases, default speed
+		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		tension.value = dynamicTension
+		friction.value = dynamicFriction
+		velocity.value = dynamicVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
+# 	reflect changes on right
+	for i in interactionsTargets
+		# push changes in springCurve into states' animation options
+		i.states.animationOptions = curve: springCurve
+		# show this visually with a state change
+		i.states.next()
 
 for i in allPresets
 	i.on Events.Click, ->
