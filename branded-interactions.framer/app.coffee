@@ -248,8 +248,7 @@ right = new PageComponent
 	scrollVertical: false
 	backgroundColor: nonblack
 	velocityThreshold: 2
-
-
+	
 # array that will store our right page layers
 rightPages = []
 
