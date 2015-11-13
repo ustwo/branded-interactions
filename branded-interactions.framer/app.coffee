@@ -6,6 +6,8 @@
 # modules
 module = require "colourTransition"
 
+# document.body.style.cursor = "auto"
+
 # colours used throughout
 mint = "rgba(45, 215, 170, 1)"
 # mint0 = "rgba(45, 215, 170, 0)"
@@ -69,38 +71,32 @@ presetStyle =
 sluggishVelocity = 120
 sluggishFriction = 20
 sluggishTension = 0
-sluggishSpeed =
-	curve: "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
+sluggishSpeed = "spring(#{sluggishVelocity}, #{sluggishFriction}, #{sluggishTension})"
 
 slowVelocity = 10
 slowFriction = 40
 slowTension = 10
-slowSpeed =
-	curve: "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
+slowSpeed = "spring(#{slowVelocity}, #{slowFriction}, #{slowTension})"
 
 smoothVelocity = 20
 smoothFriction = 50
 smoothTension = 1
-smoothSpeed =
-	curve: "spring(#{smoothVelocity}, #{smoothFriction}, #{smoothTension})"
+smoothSpeed = "spring(#{smoothVelocity}, #{smoothFriction}, #{smoothTension})"
 
 dynamicVelocity = 663
 dynamicFriction = 76
 dynamicTension = 18
-dynamicSpeed =
-	curve: "spring(#{dynamicVelocity}, #{dynamicFriction}, #{dynamicTension})"
+dynamicSpeed = "spring(#{dynamicVelocity}, #{dynamicFriction}, #{dynamicTension})"
 
 snappyVelocity = 600
 snappyFriction = 30
 snappyTension = 0
-snappySpeed =
-	curve: "spring(#{snappyVelocity}, #{snappyFriction}, #{snappyTension})"
+snappySpeed = "spring(#{snappyVelocity}, #{snappyFriction}, #{snappyTension})"
 
 blitzVelocity = 620
 blitzFriction = 20
 blitzTension = 10
-blitzSpeed =
-	curve: "spring(#{blitzVelocity}, #{blitzFriction}, #{blitzTension})"
+blitzSpeed = "spring(#{blitzVelocity}, #{blitzFriction}, #{blitzTension})"
 
 # default to an independent speed
 Framer.Defaults.Animation =
@@ -156,15 +152,20 @@ for i in [0..2]
 		min: 0, max: 1, value: 0.5
 		pixelAlign: true
 		superLayer: sliderCanvas
+		style: presetStyle
 	slider.knob.draggable.momentum = false
 	slider.fill.backgroundColor = white80
 	sliders.push(slider)
 
 # rename for easy access
-tension = sliders[0]
+# backwards for less headfuck for user
+# see Noah Levin diagram
+velocity = sliders[0]
+velocity.html = "velocity (wind-up)"
 friction = sliders[1]
-velocity = sliders[2]
-
+friction.html = "friction (weight)"
+tension = sliders[2]
+tension.html = "tension (bounciness)"
 # adjust maximum values for each,
 # make value exactly half as a generic starting point
 tension.max = 1000
@@ -180,9 +181,6 @@ velocity.value = 50
 # -----------------------------
 # slider logic: spring
 
-# spring values in an array
-# springValues = [tension, friction, velocity]
-
 # defaults
 t = tension.value
 f = friction.value
@@ -195,7 +193,6 @@ springCurve = "spring(#{t}, #{f}, #{v})"
 # -----------------------------
 presets = new PageComponent
 	midX: sliderHolder.midX, maxY: sliderHolder.y - 50
-# 	width: sliderHolder.width * 1.05
 	width: sliderHolder.width
 	height: 100
 	scrollVertical: false
@@ -248,7 +245,6 @@ right = new PageComponent
 	scrollVertical: false
 	backgroundColor: nonblack
 	velocityThreshold: 2
-
 
 # array that will store our right page layers
 rightPages = []
@@ -457,9 +453,16 @@ iphoneTarget.on Events.Click, ->
 # ------------------------------------------------------
 # overall functions, settings
 # ------------------------------------------------------
+# what is the first speed?
+springCurve = dynamicSpeed
 # default to the first speed value
 for i in interactionsTargets
-	i.states.animationOptions = dynamicSpeed
+	i.states.animationOptions = curve: springCurve
+	
+# velocity.value = dynamicVelocity
+# tension.value = dynamicTension
+# friction.value = dynamicFriction
+
 
 # function for moving the sliders
 updatePresets = (t, f, v) ->
@@ -470,10 +473,15 @@ updatePresets = (t, f, v) ->
 # default to first speed value
 updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 
+
+
+
+
 # function for reseting all interactive states
 resetStates = ->
 	for i in interactionsTargets
 		i.states.switch("default")
+	
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -507,50 +515,32 @@ presets.on "change:currentPage", ->
 	bgSwitchFrameRate = 60
 
 	if presets.currentPage is sluggish
-		for i in interactionsTargets
-			i.states.animationOptions = sluggishSpeed
 		updatePresets(sluggishTension, sluggishFriction, sluggishVelocity)
 		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
 
 	else if presets.currentPage is slow
-		for i in interactionsTargets
-			i.states.animationOptions = slowSpeed
-		updatePresets(slowTension, slowFriction, slowVelocity)
 		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
 
 	else if presets.currentPage is smooth
-		for i in interactionsTargets
-			i.states.animationOptions = smoothSpeed
-		updatePresets(smoothTension, smoothFriction, smoothVelocity)
 		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
+		updatePresets(smoothTension, smoothFriction, smoothVelocity)
+
+		
 
 	else if presets.currentPage is dynamic
-		for i in interactionsTargets
-			i.states.animationOptions = dynamicSpeed
-		updatePresets(dynamicTension, dynamicFriction, dynamicVelocity)
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
-		springCurve.curve = dynamicSpeed
 
 	else if presets.currentPage is snappy
-		for i in interactionsTargets
-			i.states.animationOptions = snappySpeed
-		updatePresets(snappyTension, snappyFriction, snappyVelocity)
 		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
 
 	else if presets.currentPage is blitz
-		for i in interactionsTargets
-			i.states.animationOptions = blitzSpeed
-		updatePresets(blitzTension, blitzFriction, blitzVelocity)
 		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
 
 	else # edge-cases, default speed
-		for i in interactionsTargets
-			i.states.animationOptions = snappySpeed
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
 
 	# reflect changes on right
 	for i in interactionsTargets
-# 		i.states.animationOptions = curve: springCurve
 		i.states.next()
 
 
@@ -571,5 +561,5 @@ right.on "change:currentPage", ->
 	# put back all the squares etc to default state
 	resetStates()
 
-Utils.interval 0.5, ->
-	print springCurve
+# Utils.interval 0.5, ->
+# 	print "springCurve: " + springCurve + " / " + "targetStates: " + opacityTarget.states.animationOptions.curve
