@@ -89,8 +89,7 @@ blitzVelocity = 10
 
 # default to an independent speed
 Framer.Defaults.Animation =
-# 	time: 0.3
-	time: 1
+	time: 0.3
 	curve: "ease"
 
 # bg layer
@@ -503,6 +502,13 @@ presets.on "change:currentPage", ->
 		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
 		tension.value = slowTension
 		friction.value = slowFriction
+		
+		# seems like if I do it through animation, the value doesn't actually change.
+		# If I do these two in this order, it does...
+		# (or I can just assign it with layer.value = x, on it's own)
+		velocity.animate
+			properties:
+				value: slowVelocity
 		velocity.value = slowVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
@@ -510,7 +516,7 @@ presets.on "change:currentPage", ->
 		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
 		tension.value = smoothTension
 		friction.value = smoothFriction
-		velocity.value = smoothVelocity
+		
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is dynamic
@@ -565,5 +571,9 @@ right.on "change:currentPage", ->
 	# put back all the squares etc to default state
 	resetStates()
 
+
+# ------------------------------------------------------
+# testing
+# ------------------------------------------------------
 Utils.interval 0.5, ->
 	print springCurve
