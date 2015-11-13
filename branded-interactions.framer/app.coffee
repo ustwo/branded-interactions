@@ -63,23 +63,23 @@ presetStyle =
 	"background-color": black20
 
 # animation presets
-sluggishTension = 120
-sluggishFriction = 20
+sluggishTension = 20
+sluggishFriction = 30
 sluggishVelocity = 0
 
-slowTension = 10
-slowFriction = 40
-slowVelocity = 10
+slowTension = 50
+slowFriction = 15
+slowVelocity = 0
 
-smoothTension = 20
-smoothFriction = 50
-smoothVelocity = 1
+smoothTension = 120
+smoothFriction = 20
+smoothVelocity = 0
 
 dynamicTension = 663
 dynamicFriction = 76
 dynamicVelocity = 18
 
-snappyTension= 600
+snappyTension = 600
 snappyFriction = 30
 snappyVelocity = 0
 
@@ -177,12 +177,11 @@ velocity.value = 50
 # default
 springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
-# custom: dynamic preset
+# custom: dynamic preset (launch preset)
 tension.value = dynamicTension
 friction.value = dynamicFriction
 velocity.value = dynamicVelocity
 springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-
 
 # -----------------------------
 # left side: presets (pages)
@@ -493,6 +492,10 @@ presets.on "change:currentPage", ->
 
 	if presets.currentPage is sluggish
 		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: sluggishTension
+		friction.animate properties: value: sluggishFriction
+		velocity.animate properties: value: sluggishVelocity
 		tension.value = sluggishTension
 		friction.value = sluggishFriction
 		velocity.value = sluggishVelocity
@@ -500,27 +503,32 @@ presets.on "change:currentPage", ->
 
 	else if presets.currentPage is slow
 		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: slowTension
+		friction.animate properties: value: slowFriction
+		velocity.animate properties: value: slowVelocity
 		tension.value = slowTension
 		friction.value = slowFriction
-		
-		# seems like if I do it through animation, the value doesn't actually change.
-		# If I do these two in this order, it does...
-		# (or I can just assign it with layer.value = x, on it's own)
-		velocity.animate
-			properties:
-				value: slowVelocity
 		velocity.value = slowVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is smooth
 		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: smoothTension
+		friction.animate properties: value: smoothFriction
+		velocity.animate properties: value: smoothVelocity
 		tension.value = smoothTension
 		friction.value = smoothFriction
-		
+		velocity.value = smoothVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is dynamic
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: dynamicTension
+		friction.animate properties: value: dynamicFriction
+		velocity.animate properties: value: dynamicVelocity
 		tension.value = dynamicTension
 		friction.value = dynamicFriction
 		velocity.value = dynamicVelocity
@@ -528,6 +536,10 @@ presets.on "change:currentPage", ->
 
 	else if presets.currentPage is snappy
 		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: snappyTension
+		friction.animate properties: value: snappyFriction
+		velocity.animate properties: value: snappyVelocity
 		tension.value = snappyTension
 		friction.value = snappyFriction
 		velocity.value = snappyVelocity
@@ -535,6 +547,10 @@ presets.on "change:currentPage", ->
 
 	else if presets.currentPage is blitz
 		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: blitzTension
+		friction.animate properties: value: blitzFriction
+		velocity.animate properties: value: blitzVelocity
 		tension.value = blitzTension
 		friction.value = blitzFriction
 		velocity.value = blitzVelocity
@@ -542,6 +558,10 @@ presets.on "change:currentPage", ->
 	
 	else # edge-cases, default speed
 		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: dynamicTension
+		friction.animate properties: value: dynamicFriction
+		velocity.animate properties: value: dynamicVelocity
 		tension.value = dynamicTension
 		friction.value = dynamicFriction
 		velocity.value = dynamicVelocity
@@ -575,5 +595,12 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
-Utils.interval 0.5, ->
-	print springCurve
+# Utils.interval 0.5, ->
+# 	print springCurve
+
+
+
+
+
+
+
