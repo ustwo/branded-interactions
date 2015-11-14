@@ -166,22 +166,46 @@ sluggish.friction = sluggishFriction
 sluggish.velocity = sluggishVelocity
 sluggish.fill = sluggishFill
 
-
-allPresets[1].html = "slow"
-allPresets[1].name = "slow"
 slow = allPresets[1]
-allPresets[2].html = "smooth"
-allPresets[2].name = "smooth"
+slow.html = "slow"
+slow.name = "slow"
+slow.tension = slowTension
+slow.friction = slowFriction
+slow.velocity = slowVelocity
+slow.fill = slowFill
+
 smooth = allPresets[2]
-allPresets[3].html = "dynamic"
-allPresets[3].name = "dynamic"
+smooth.html = "smooth"
+smooth.name = "smooth"
+smooth.tension = smoothTension
+smooth.friction = smoothFriction
+smooth.velocity = smoothVelocity
+smooth.fill = smoothFill
+
 dynamic = allPresets[3]
-allPresets[4].html = "snappy"
-allPresets[4].name = "snappy"
+dynamic.html = "dynamic"
+dynamic.name = "dynamic"
+dynamic.tension = dynamicTension
+dynamic.friction = dynamicFriction
+dynamic.velocity = dynamicVelocity
+dynamic.fill = dynamicFill
+
 snappy = allPresets[4]
-allPresets[5].html = "blitz"
-allPresets[5].name = "blitz"
+snappy.html = "snappy"
+snappy.name = "snappy"
+snappy.tension = snappyTension
+snappy.friction = snappyFriction
+snappy.velocity = snappyVelocity
+snappy.fill = snappyFill
+
 blitz = allPresets[5]
+blitz.html = "blitz"
+blitz.name = "blitz"
+blitz.tension = blitzTension
+blitz.friction = blitzFriction
+blitz.velocity = blitzVelocity
+blitz.fill = blitzFill
+
 
 # staging
 presets.snapToPage(allPresets[3], false)
@@ -424,34 +448,7 @@ pushStates = ->
 		i.states.next()
 	
 # funciton for updating springCurve
-updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
-	# update background colour
-	module.colourTransition(left, presetFill, bgSpeed, bgFR)
-	# change values accordingly (to preset)
-	tension.animate properties: value: presetTension
-	friction.animate properties: value: presetFriction
-	velocity.animate properties: value: presetVelocity
-	# push these to the springCurve
-	springCurve = "spring(#{presetTension}, #{presetFriction}, #{presetVelocity})"
-	# push the new springCurve to the states, and animate
-	pushStates()
-		
-updateCurveTwo = (preset, fill) ->
-	print preset.tension
-	print preset.friction
-	print preset.velocity
-# 	update background colour
-	module.colourTransition(left, fill, bgSpeed, bgFR)
-# 	change values accordingly (to preset)
-	tension.animate properties: value: preset.tension
-	friction.animate properties: value: preset.friction
-	velocity.animate properties: value: preset.velocity
-# 	push these to the springCurve
-	springCurve = "spring(#{preset.tension}, #{preset.friction}, #{preset.velocity})"
-# 	push the new springCurve to the states, and animate
-	pushStates()
-	
-updateCurveThree = (preset) ->
+updateCurve = (preset) ->
 	print preset.tension
 	print preset.friction
 	print preset.velocity
@@ -500,26 +497,25 @@ presets.on "change:currentPage", ->
 		time: 0.4
 		
 	if presets.currentPage is sluggish
-# 		updateCurve(sluggishFill, sluggishTension, sluggishFriction, sluggishVelocity)
-		updateCurveThree(sluggish)
+		updateCurve(sluggish)
 
 	else if presets.currentPage is slow
-		updateCurve(slowFill, slowTension, slowFriction, slowVelocity)
+		updateCurve(slow)
 
 	else if presets.currentPage is smooth
-		updateCurve(smoothFill, smoothTension, smoothFriction, smoothVelocity)
+		updateCurve(smooth)
 
 	else if presets.currentPage is dynamic
-		updateCurve(dynamicFill, dynamicTension, dynamicFriction, dynamicVelocity)
+		updateCurve(dynamic)
 
 	else if presets.currentPage is snappy
-		updateCurveTwo(snappyCurve, snappyFill)
+		updateCurve(snappy)
 
 	else if presets.currentPage is blitz
-		updateCurve(blitzFill, blitzTension, blitzFriction, blitzVelocity)
+		updateCurve(blitz)
 	
 	else # edge-cases, default speed
-		updateCurve(dynamicFill, dynamicTension, dynamicFriction, dynamicVelocity)
+		updateCurve(dynamic)
 
 # ------------------------------------------------------
 # right side: changes
@@ -537,8 +533,8 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
-Utils.interval 0.5, ->
-	print springCurve
+# Utils.interval 0.5, ->
+# 	print springCurve
 
 
 
