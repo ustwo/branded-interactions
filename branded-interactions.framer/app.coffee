@@ -3,21 +3,19 @@
 # ------------------------------------------------------
 # overall setup
 # ------------------------------------------------------
-# modules
-module = require "colourTransition"
-ustwoColours = require "ustwoColours"
-Utils.globalLayers ustwoColours
-
 # document.body.style.cursor = "auto"
 
-# custom colours
-white = "rgba(255, 255, 255, 1)"
-white80 = "rgba(255, 255, 255, 0.8)"
-white20 = "rgba(255, 255, 255, 0.2)"
-black50 = "rgba(0, 0, 0, 0.5)"
-black20 = "rgba(0, 0, 0, 0.2)"
-transparent = "rgba(0, 0, 0, 0)"
-
+# modules
+module = require "colourTransition"
+# specific ustwo colours
+ustwoColours = require "ustwoColours"
+Utils.globalLayers ustwoColours
+# general text styles, colours
+styles = require "styles"
+Utils.globalLayers styles
+# specific animation presets
+presets = require "presets"
+Utils.globalLayers presets
 
 # map colours to presets
 sluggishFill = piglet
@@ -27,50 +25,6 @@ dynamicFill = pot
 snappyFill = blu
 blitzFill = mare
 
-# styles
-squareStyle =
-	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
-	"font-size": "18pt"
-	"line-height": "600px"
-	"text-align": "center"
-	"text-transform": "uppercase"
-	"color": black50
-
-presetStyle =
-	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
-	"font-size": "18pt"
-	"line-height": "100px"
-	"text-align": "center"
-	"text-transform": "uppercase"
-	"color": white80
-# 	"padding": "10pt 60pt"
-	"background-color": black20
-
-# animation presets
-sluggishTension = 20
-sluggishFriction = 30
-sluggishVelocity = 0
-
-slowTension = 50
-slowFriction = 15
-slowVelocity = 0
-
-smoothTension = 120
-smoothFriction = 20
-smoothVelocity = 0
-
-dynamicTension = 663
-dynamicFriction = 76
-dynamicVelocity = 18
-
-snappyTension = 600
-snappyFriction = 30
-snappyVelocity = 0
-
-blitzTension = 620
-blitzFriction = 20
-blitzVelocity = 10
-
 # default to an independent speed
 Framer.Defaults.Animation =
 	time: 0.3
@@ -79,7 +33,6 @@ Framer.Defaults.Animation =
 # bg layer
 bg = new BackgroundLayer
 	backgroundColor: nonBlack
-
 
 # ------------------------------------------------------
 # left side
