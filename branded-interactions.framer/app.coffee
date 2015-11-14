@@ -206,7 +206,6 @@ blitz.friction = blitzFriction
 blitz.velocity = blitzVelocity
 blitz.fill = blitzFill
 
-
 # staging
 presets.snapToPage(allPresets[3], false)
 presets.currentPage.opacity = 1
@@ -338,7 +337,6 @@ scaleTarget.states.add
 scale.on Events.Click, ->
 	scaleTarget.states.next()
 
-
 # -----------------------------
 # rotate
 rotateTarget = new Layer
@@ -449,10 +447,6 @@ pushStates = ->
 	
 # funciton for updating springCurve
 updateCurve = (preset) ->
-	print preset.tension
-	print preset.friction
-	print preset.velocity
-	preset.fill
 # 	update background colour
 	module.colourTransition(left, preset.fill, bgSpeed, bgFR)
 # 	change values accordingly (to preset)
@@ -495,25 +489,20 @@ presets.on "change:currentPage", ->
 		properties:
 			opacity: 1
 		time: 0.4
-		
+	
+	# update curve
 	if presets.currentPage is sluggish
 		updateCurve(sluggish)
-
 	else if presets.currentPage is slow
 		updateCurve(slow)
-
 	else if presets.currentPage is smooth
 		updateCurve(smooth)
-
 	else if presets.currentPage is dynamic
 		updateCurve(dynamic)
-
 	else if presets.currentPage is snappy
 		updateCurve(snappy)
-
 	else if presets.currentPage is blitz
 		updateCurve(blitz)
-	
 	else # edge-cases, default speed
 		updateCurve(dynamic)
 
