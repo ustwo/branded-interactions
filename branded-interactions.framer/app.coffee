@@ -409,6 +409,14 @@ resetStates = ->
 	for i in interactionsTargets
 		i.states.switch("default")
 		
+# function for pushing updates in springCurve (updateCurve function)
+pushStates = ->
+	for i in interactionsTargets
+		# push (assuming) above changes to states
+		i.states.animationOptions = curve: springCurve
+		# go to next state
+		i.states.next()
+		
 # funciton for updating springCurve
 updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
 		module.colourTransition(left, presetFill, bgSpeed, bgFR)
@@ -420,14 +428,8 @@ updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
 		friction.value = presetFriction
 		velocity.value = presetVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-		
-# function for pushing updates in springCurve (updateCurve function)
-pushStates = ->
-	for i in interactionsTargets
-		# push (assuming) above changes to states
-		i.states.animationOptions = curve: springCurve
-		# go to next state
-		i.states.next()
+		# push these changes to the states
+		pushStates()
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -461,9 +463,6 @@ presets.on "change:currentPage", ->
 			opacity: 1
 		time: 0.4
 		
-	# reflect changes in springCurve on right
-	pushStates()
-	
 	if presets.currentPage is sluggish
 		updateCurve(sluggishFill, sluggishTension, sluggishFriction, sluggishVelocity)
 
@@ -503,8 +502,6 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # Utils.interval 0.5, ->
 # 	print springCurve
-
-
 
 
 
