@@ -21,3 +21,8 @@ exports.snappyVelocity = 0
 exports.blitzTension = 620
 exports.blitzFriction = 20
 exports.blitzVelocity = 10
+
+exports.snappyCurve =
+	tension: 600
+	friction: 30
+	velocity: 0

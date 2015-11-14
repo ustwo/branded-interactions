@@ -158,9 +158,15 @@ for i in [0...6]
 		opacity: 0.3
 	allPresets.push(preset)
 
-allPresets[0].html = "sluggish"
-allPresets[0].name = "sluggish"
 sluggish = allPresets[0]
+sluggish.html = "sluggish"
+sluggish.name = "sluggish"
+sluggish.tension = sluggishTension
+sluggish.friction = sluggishFriction
+sluggish.velocity = sluggishVelocity
+sluggish.fill = sluggishFill
+
+
 allPresets[1].html = "slow"
 allPresets[1].name = "slow"
 slow = allPresets[1]
@@ -416,7 +422,7 @@ pushStates = ->
 		i.states.animationOptions = curve: springCurve
 		# go to next state
 		i.states.next()
-		
+	
 # funciton for updating springCurve
 updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
 	# update background colour
@@ -429,19 +435,37 @@ updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
 	springCurve = "spring(#{presetTension}, #{presetFriction}, #{presetVelocity})"
 	# push the new springCurve to the states, and animate
 	pushStates()
+		
+updateCurveTwo = (preset, fill) ->
+	print preset.tension
+	print preset.friction
+	print preset.velocity
+# 	update background colour
+	module.colourTransition(left, fill, bgSpeed, bgFR)
+# 	change values accordingly (to preset)
+	tension.animate properties: value: preset.tension
+	friction.animate properties: value: preset.friction
+	velocity.animate properties: value: preset.velocity
+# 	push these to the springCurve
+	springCurve = "spring(#{preset.tension}, #{preset.friction}, #{preset.velocity})"
+# 	push the new springCurve to the states, and animate
+	pushStates()
 	
-# updateCurve2 = (preset) ->
-# 	module.colourTransition(left, (preset + "Fill"), bgSpeed, bgFR)
-# 	# seems like it doesn't work with animation only
-# 	tension.animate properties: value: (preset + "Tension")
-# 	friction.animate properties: value: (preset + "Friction")
-# 	velocity.animate properties: value: (preset + "Velocity")
-# 	tension.value = (preset + "Tension")
-# 	friction.value = (preset + "Friction")
-# 	velocity.value = (preset + "Velocity")
-# 	springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-# 	# push these changes to the states
-# 	pushStates()
+updateCurveThree = (preset) ->
+	print preset.tension
+	print preset.friction
+	print preset.velocity
+	preset.fill
+# 	update background colour
+	module.colourTransition(left, preset.fill, bgSpeed, bgFR)
+# 	change values accordingly (to preset)
+	tension.animate properties: value: preset.tension
+	friction.animate properties: value: preset.friction
+	velocity.animate properties: value: preset.velocity
+# 	push these to the springCurve
+	springCurve = "spring(#{preset.tension}, #{preset.friction}, #{preset.velocity})"
+# 	push the new springCurve to the states, and animate
+	pushStates()
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -476,7 +500,8 @@ presets.on "change:currentPage", ->
 		time: 0.4
 		
 	if presets.currentPage is sluggish
-		updateCurve(sluggishFill, sluggishTension, sluggishFriction, sluggishVelocity)
+# 		updateCurve(sluggishFill, sluggishTension, sluggishFriction, sluggishVelocity)
+		updateCurveThree(sluggish)
 
 	else if presets.currentPage is slow
 		updateCurve(slowFill, slowTension, slowFriction, slowVelocity)
@@ -488,7 +513,7 @@ presets.on "change:currentPage", ->
 		updateCurve(dynamicFill, dynamicTension, dynamicFriction, dynamicVelocity)
 
 	else if presets.currentPage is snappy
-		updateCurve(snappyFill, snappyTension, snappyFriction, snappyVelocity)
+		updateCurveTwo(snappyCurve, snappyFill)
 
 	else if presets.currentPage is blitz
 		updateCurve(blitzFill, blitzTension, blitzFriction, blitzVelocity)
@@ -512,8 +537,8 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
-# Utils.interval 0.5, ->
-# 	print springCurve
+Utils.interval 0.5, ->
+	print springCurve
 
 
 
