@@ -1,4 +1,7 @@
 # <@>
+# Danny White
+# NYC / 2015
+# https://github.com/ustwo/branded-interactions
 
 # ------------------------------------------------------
 # overall setup
@@ -46,12 +49,14 @@ left = new Layer
 # -----------------------------
 # left side: slider setup
 # -----------------------------
+# slider sizing to reference later
 sliderWidth = left.width/2
 sliderSize =
 	width: sliderWidth
 	height: 24
 sliderGutter = sliderSize.height * 5
 
+# all sliders
 sliderCanvas = new Layer
 	width: sliderWidth
 	height: (sliderSize.height * 3) + (sliderGutter * 2)
@@ -60,6 +65,7 @@ sliderCanvas = new Layer
 	superLayer: left
 	clip: false
 
+# padded box behind
 sliderHolder = new Layer
 	width: sliderCanvas.width * 1.4
 	height: sliderCanvas.height * 1.8
@@ -71,11 +77,12 @@ sliderCanvas.bringToFront()
 
 
 # -----------------------------
-# left side: sliders
+# left side: sliders: spring
 # -----------------------------
 # array that will store our right page layers
 allSliders = []
 
+# loop to make a few sliders
 for i in [0..2]
 	slider = new SliderComponent
 		y: i * (sliderSize.height + sliderGutter)
@@ -241,10 +248,12 @@ squareCanvas = new Layer
 	superLayer: rightOne
 	clip: false
 
+# square interactions variables
 interactions = []
 rows = 2
 cols = 2
 
+# make the grid of squares
 [0..rows-1].map (a) ->
 	[0..cols-1].map (b) ->
 		i = new Layer
@@ -256,7 +265,7 @@ cols = 2
 			clip: false
 			style: squareStyle
 			superLayer: squareCanvas
-
+		# push to array set up above
 		interactions.push(i)
 
 # rename these layers to make them handy
@@ -328,7 +337,6 @@ positionTarget.states.add
 position.on Events.Click, ->
 	positionTarget.states.next()
 
-
 # -----------------------------
 # opacity
 opacityTargetTop = new Layer
@@ -396,11 +404,20 @@ for i in interactionsTargets
 resetStates = ->
 	for i in interactionsTargets
 		i.states.switch("default")
+
+# function for pushing changes in springCurve	
+pushStates = ->
+	for i in interactionsTargets
+		# push (assuming) above changes to states
+		i.states.animationOptions = curve: springCurve
+		# go to next state
+		i.states.next()
 	
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
 # ------------------------------------------------------
+# update springCurve when sliders are changed
 for i in allSliders
 	i.on "change:value", ->
 		if this is tension then tension.value = Math.round(tension.value)
@@ -411,7 +428,9 @@ for i in allSliders
 # 
 	i.knob.on Events.DragEnd, ->
 		for i in interactionsTargets
+			# push these changes to states
 			i.states.animationOptions = curve: springCurve
+			# go to next state
 			i.states.next()
 
 presets.on "change:currentPage", ->
