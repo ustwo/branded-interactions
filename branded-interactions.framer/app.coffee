@@ -408,15 +408,26 @@ for i in interactionsTargets
 resetStates = ->
 	for i in interactionsTargets
 		i.states.switch("default")
-
-# function for pushing changes in springCurve	
+		
+# funciton for updating springCurve
+updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
+		module.colourTransition(left, presetFill, bgSpeed, bgFR)
+		# seems like it doesn't work with animation only
+		tension.animate properties: value: presetTension
+		friction.animate properties: value: presetFriction
+		velocity.animate properties: value: presetVelocity
+		tension.value = presetTension
+		friction.value = presetFriction
+		velocity.value = presetVelocity
+		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		
+# function for pushing updates in springCurve (updateCurve function)
 pushStates = ->
 	for i in interactionsTargets
 		# push (assuming) above changes to states
 		i.states.animationOptions = curve: springCurve
 		# go to next state
 		i.states.next()
-	
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -452,83 +463,27 @@ presets.on "change:currentPage", ->
 		
 	# reflect changes in springCurve on right
 	pushStates()
-
+	
 	if presets.currentPage is sluggish
-		module.colourTransition(left, sluggishFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: sluggishTension
-		friction.animate properties: value: sluggishFriction
-		velocity.animate properties: value: sluggishVelocity
-		tension.value = sluggishTension
-		friction.value = sluggishFriction
-		velocity.value = sluggishVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(sluggishFill, sluggishTension, sluggishFriction, sluggishVelocity)
 
 	else if presets.currentPage is slow
-		module.colourTransition(left, slowFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: slowTension
-		friction.animate properties: value: slowFriction
-		velocity.animate properties: value: slowVelocity
-		tension.value = slowTension
-		friction.value = slowFriction
-		velocity.value = slowVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(slowFill, slowTension, slowFriction, slowVelocity)
 
 	else if presets.currentPage is smooth
-		module.colourTransition(left, smoothFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: smoothTension
-		friction.animate properties: value: smoothFriction
-		velocity.animate properties: value: smoothVelocity
-		tension.value = smoothTension
-		friction.value = smoothFriction
-		velocity.value = smoothVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(smoothFill, smoothTension, smoothFriction, smoothVelocity)
 
 	else if presets.currentPage is dynamic
-		module.colourTransition(left, dynamicFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: dynamicTension
-		friction.animate properties: value: dynamicFriction
-		velocity.animate properties: value: dynamicVelocity
-		tension.value = dynamicTension
-		friction.value = dynamicFriction
-		velocity.value = dynamicVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(dynamicFill, dynamicTension, dynamicFriction, dynamicVelocity)
 
 	else if presets.currentPage is snappy
-		module.colourTransition(left, snappyFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: snappyTension
-		friction.animate properties: value: snappyFriction
-		velocity.animate properties: value: snappyVelocity
-		tension.value = snappyTension
-		friction.value = snappyFriction
-		velocity.value = snappyVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(snappyFill, snappyTension, snappyFriction, snappyVelocity)
 
 	else if presets.currentPage is blitz
-		module.colourTransition(left, blitzFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: blitzTension
-		friction.animate properties: value: blitzFriction
-		velocity.animate properties: value: blitzVelocity
-		tension.value = blitzTension
-		friction.value = blitzFriction
-		velocity.value = blitzVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(blitzFill, blitzTension, blitzFriction, blitzVelocity)
 	
 	else # edge-cases, default speed
-		module.colourTransition(left, dynamicFill, bgSpeed, bgFR)
-		# seems like it doesn't work with animation only
-		tension.animate properties: value: dynamicTension
-		friction.animate properties: value: dynamicFriction
-		velocity.animate properties: value: dynamicVelocity
-		tension.value = dynamicTension
-		friction.value = dynamicFriction
-		velocity.value = dynamicVelocity
-		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
+		updateCurve(dynamicFill, dynamicTension, dynamicFriction, dynamicVelocity)
 
 # ------------------------------------------------------
 # right side: changes
