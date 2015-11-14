@@ -9,7 +9,12 @@
 # document.body.style.cursor = "auto"
 
 # modules
+
+# bg colour switcher, and associated variables
 module = require "colourTransition"
+bgSpeed = 0.2
+bgFR = 60 # frame rate
+
 # specific ustwo colours
 ustwoColours = require "ustwoColours"
 # general text styles, colours
@@ -362,7 +367,6 @@ opacityTarget.states.add
 opacity.on Events.Click, ->
 	opacityTarget.states.next()
 
-
 # -----------------------------
 # right side: iphone #1
 # -----------------------------
@@ -417,6 +421,11 @@ pushStates = ->
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
 # ------------------------------------------------------
+# update page on click
+for i in allPresets
+	i.on Events.Click, ->
+		presets.snapToPage(this)
+		
 # update springCurve when sliders are changed
 for i in allSliders
 	i.on "change:value", ->
@@ -427,11 +436,7 @@ for i in allSliders
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 # 
 	i.knob.on Events.DragEnd, ->
-		for i in interactionsTargets
-			# push these changes to states
-			i.states.animationOptions = curve: springCurve
-			# go to next state
-			i.states.next()
+		pushStates()
 
 presets.on "change:currentPage", ->
 	# animate out previousPage
@@ -444,12 +449,12 @@ presets.on "change:currentPage", ->
 		properties:
 			opacity: 1
 		time: 0.4
-
-	bgSwitchSpeed = 0.2
-	bgSwitchFrameRate = 60
+		
+	# reflect changes in springCurve on right
+	pushStates()
 
 	if presets.currentPage is sluggish
-		module.colourTransition(left, sluggishFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, sluggishFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: sluggishTension
 		friction.animate properties: value: sluggishFriction
@@ -460,7 +465,7 @@ presets.on "change:currentPage", ->
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is slow
-		module.colourTransition(left, slowFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, slowFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: slowTension
 		friction.animate properties: value: slowFriction
@@ -471,7 +476,7 @@ presets.on "change:currentPage", ->
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is smooth
-		module.colourTransition(left, smoothFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, smoothFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: smoothTension
 		friction.animate properties: value: smoothFriction
@@ -482,7 +487,7 @@ presets.on "change:currentPage", ->
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is dynamic
-		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, dynamicFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: dynamicTension
 		friction.animate properties: value: dynamicFriction
@@ -493,7 +498,7 @@ presets.on "change:currentPage", ->
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is snappy
-		module.colourTransition(left, snappyFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, snappyFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: snappyTension
 		friction.animate properties: value: snappyFriction
@@ -504,7 +509,7 @@ presets.on "change:currentPage", ->
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 
 	else if presets.currentPage is blitz
-		module.colourTransition(left, blitzFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, blitzFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: blitzTension
 		friction.animate properties: value: blitzFriction
@@ -515,7 +520,7 @@ presets.on "change:currentPage", ->
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 	
 	else # edge-cases, default speed
-		module.colourTransition(left, dynamicFill, bgSwitchSpeed, bgSwitchFrameRate)
+		module.colourTransition(left, dynamicFill, bgSpeed, bgFR)
 		# seems like it doesn't work with animation only
 		tension.animate properties: value: dynamicTension
 		friction.animate properties: value: dynamicFriction
@@ -524,17 +529,6 @@ presets.on "change:currentPage", ->
 		friction.value = dynamicFriction
 		velocity.value = dynamicVelocity
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-
-# 	reflect changes on right
-	for i in interactionsTargets
-		# push changes in springCurve into states' animation options
-		i.states.animationOptions = curve: springCurve
-		# show this visually with a state change
-		i.states.next()
-
-for i in allPresets
-	i.on Events.Click, ->
-		presets.snapToPage(this)
 
 # ------------------------------------------------------
 # right side: changes
@@ -548,7 +542,6 @@ right.on "change:currentPage", ->
 
 	# put back all the squares etc to default state
 	resetStates()
-
 
 # ------------------------------------------------------
 # testing
