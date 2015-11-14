@@ -5,43 +5,27 @@
 # ------------------------------------------------------
 # modules
 module = require "colourTransition"
+ustwoColours = require "ustwoColours"
+Utils.globalLayers ustwoColours
 
 # document.body.style.cursor = "auto"
 
 # custom colours
-white = "#FFFFFF"
+white = "rgba(255, 255, 255, 1)"
 white80 = "rgba(255, 255, 255, 0.8)"
 white20 = "rgba(255, 255, 255, 0.2)"
 black50 = "rgba(0, 0, 0, 0.5)"
 black20 = "rgba(0, 0, 0, 0.2)"
 transparent = "rgba(0, 0, 0, 0)"
 
-# ustwo colours
-piglet = "rgba(237, 0, 130, 1)"
-passion = "rgba(230, 12, 41, 1)"
-ohra = "rgba(255, 85, 25, 1)"
-honey = "rgba(255, 191, 0, 1)"
-jeezz = "rgba(150, 204, 141, 1)"
-pot = "rgba(20, 192, 77, 1)"
-mare = "rgba(22, 213, 217, 1)"
-blu = "rgba(0, 156, 243, 1)"
-navy = "rgba(20, 63, 204, 1)"
-rain = "rgba(97, 20, 204, 1)"
 
+# map colours to presets
 sluggishFill = piglet
 slowFill = honey
-smoothFill = ohra
+smoothFill = ohRa
 dynamicFill = pot
 snappyFill = blu
 blitzFill = mare
-
-# greyscale tones
-nonwhite = "rgba(248, 248, 248, 1)"
-grey01 = "rgba(234, 234, 234, 1)"
-grey02 = "rgba(191, 191, 191, 1)"
-grey03 = "rgba(150, 150, 150, 1)"
-grey04 = "rgba(100, 100, 100, 1)"
-nonblack = "rgba(51, 51, 51, 1)"
 
 # styles
 squareStyle =
@@ -94,7 +78,7 @@ Framer.Defaults.Animation =
 
 # bg layer
 bg = new BackgroundLayer
-	backgroundColor: nonblack
+	backgroundColor: nonBlack
 
 
 # ------------------------------------------------------
@@ -238,7 +222,7 @@ right = new PageComponent
 	x: Screen.width/2
 	width: Screen.width/2, height: Screen.height
 	scrollVertical: false
-	backgroundColor: nonblack
+	backgroundColor: nonBlack
 	velocityThreshold: 2
 
 # array that will store our right page layers
