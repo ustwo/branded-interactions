@@ -9,13 +9,15 @@
 module = require "colourTransition"
 # specific ustwo colours
 ustwoColours = require "ustwoColours"
-Utils.globalLayers ustwoColours
 # general text styles, colours
 styles = require "styles"
-Utils.globalLayers styles
 # specific animation presets
 presets = require "presets"
-Utils.globalLayers presets
+
+# make relevant modules global
+global = [ustwoColours, styles, presets]
+for i in global
+	Utils.globalLayers i
 
 # map colours to presets
 sluggishFill = piglet
