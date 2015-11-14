@@ -419,20 +419,16 @@ pushStates = ->
 		
 # funciton for updating springCurve
 updateCurve = (presetFill, presetTension, presetFriction, presetVelocity) ->
+	# update background colour
 	module.colourTransition(left, presetFill, bgSpeed, bgFR)
-	# seems like it doesn't work with animation only
+	# change values accordingly (to preset)
 	tension.animate properties: value: presetTension
 	friction.animate properties: value: presetFriction
 	velocity.animate properties: value: presetVelocity
-	tension.value = presetTension
-	friction.value = presetFriction
-	velocity.value = presetVelocity
-	springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-	# push these changes to the states
+	# push these to the springCurve
+	springCurve = "spring(#{presetTension}, #{presetFriction}, #{presetVelocity})"
+	# push the new springCurve to the states, and animate
 	pushStates()
-		
-# updateCurve2 = (preset) ->
-	
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
