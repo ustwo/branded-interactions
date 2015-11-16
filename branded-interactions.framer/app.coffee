@@ -401,28 +401,66 @@ opacity.on Events.Click, ->
 iphone = new Layer
 	midX: rightOne.width/2, midY: rightOne.height/2
 	width: 994, height: 2028
-	scale: 0.5, opacity: 0.2
+	scale: 0.5, opacity: 0.1
 	image: "images/iphone.png"
 	superLayer: rightTwo
 
-iphoneTarget = new Layer
-	width: boundsSize.width, height: boundsSize.height/2
-	midX: rightOne.width/2, midY: rightOne.height/2
-	backgroundColor: white80
-	borderRadius: 6
+canvas = new Layer
+	width: right.width * 0.41
+	height: right.height * 0.49
+	backgroundColor: null
 	superLayer: rightTwo
-	originX: 0.5
-interactionsTargets.push(iphoneTarget)
+	clip: true
+canvas.center()
 
-iphoneTarget.states.add
-	# opacity & position
-	first:
-		opacity: 0.6, maxY: 1000, width: (boundsSize.width + 100), midX: (rightOne.width/2)
-	second: rotation: 90
-	last: scale: 2
+card = new Layer
+	superLayer: canvas
+	width: canvas.width * 0.9
+	height: canvas.height * 0.84
+	midX: canvas.width/2
+	y: 100
+	borderRadius: 6
+	backgroundColor: white
+	opacity: 0.5
 
-iphoneTarget.on Events.Click, ->
-	iphoneTarget.states.next()
+card.states.add
+	second: midX: canvas.width * 0.75, scale: 0.66, height: canvas.height, midY: (canvas.height/2) * 1.05, opacity: 0.2
+interactionsTargets.push(card)
+	
+plus = new Layer
+	superLayer: canvas
+	x: canvas.width * 0.058
+	y: canvas.height * 0.035
+	width: 36, height: 36
+	image: "images/plus.png"
+plus.states.add
+	second: rotation: 135, maxX: canvas.width * (1-0.058)
+interactionsTargets.push(plus)
+
+	
+newCards = []	
+for newCard in [0..2]
+	newCard = new Layer
+		superLayer: canvas
+		width: canvas.width * 0.44
+		height: canvas.height * 0.35
+		maxX: - ((canvas.width * 0.44) * (newCard) + 75)
+		y: newCard * ((canvas.height * 0.35) + 50) - 75
+		borderRadius: 6
+		backgroundColor: white
+		opacity: 0.2
+		
+	newCard.states.add
+		second: x: - (canvas.width * 0.44) * 0.4, opacity: 0.5
+	
+	interactionsTargets.push(newCard)	
+	newCards.push(newCard)
+
+canvas.on Events.Click, ->
+	for i in interactionsTargets
+		i.states.next()
+
+right.snapToPage(rightTwo, false)
 
 # ------------------------------------------------------
 # overall functions, settings
@@ -524,8 +562,3 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # Utils.interval 0.5, ->
 # 	print springCurve
-
-
-
-
-
