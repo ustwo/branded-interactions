@@ -34,6 +34,7 @@ smoothFill = ohRa
 dynamicFill = pot
 snappyFill = blu
 blitzFill = mare
+customFill = sRain
 
 # default to an independent speed
 Framer.Defaults.Animation =
@@ -146,7 +147,7 @@ presets = new PageComponent
 
 allPresets = []
 # Create layers in a for-loop
-for i in [0...6]
+for i in [0...7]
 	preset = new Layer
 		superLayer: presets.content
 		width: 150
@@ -205,6 +206,15 @@ blitz.tension = blitzTension
 blitz.friction = blitzFriction
 blitz.velocity = blitzVelocity
 blitz.fill = blitzFill
+
+custom = allPresets[6]
+custom.html = "custom"
+custom.name = "custom"
+custom.superLayer = presets.content
+# custom.tension = customTension
+# custom.friction = customFriction
+# custom.velocity = customVelocity
+custom.fill = customFill
 
 # staging
 presets.snapToPage(allPresets[3], false)
@@ -475,13 +485,13 @@ resetStates = ->
 		
 # function for pushing updates in springCurve (updateCurve function)
 pushStates = ->
-	for i in interactionsTargets
+	for target in interactionsTargets
 		# push (assuming) above changes to states
-		i.states.animationOptions = curve: springCurve
+		target.states.animationOptions = curve: springCurve
 		# go to next state
-		i.states.next()
+		target.states.next()
 	
-# funciton for updating springCurve
+# function for updating springCurve
 updateCurve = (preset) ->
 # 	update background colour
 	module.colourTransition(left, preset.fill, bgSpeed, bgFR)
@@ -510,8 +520,10 @@ for i in allSliders
 		if this is velocity then velocity.value = Math.round(velocity.value)
 
 		springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
-# 
+	
+	# if th knob has been moved, then custom changes have been made
 	i.knob.on Events.DragEnd, ->
+		presets.snapToPage(custom)
 		pushStates()
 
 presets.on "change:currentPage", ->
@@ -539,6 +551,8 @@ presets.on "change:currentPage", ->
 		updateCurve(snappy)
 	else if presets.currentPage is blitz
 		updateCurve(blitz)
+	else if presets.currentPage is custom
+		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
 	else # edge-cases, default speed
 		updateCurve(dynamic)
 

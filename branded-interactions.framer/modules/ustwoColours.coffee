@@ -27,7 +27,7 @@ exports.navy = "rgba(20, 63, 204, 1)"
 exports.rain = "rgba(97, 20, 204, 1)"
 
 # Soft colour palette
-exports.spiglet = "rgba(255, 165, 190, 1)"
+exports.sPiglet = "rgba(255, 165, 190, 1)"
 exports.sPassion = "rgba(250, 125, 120, 1)"
 exports.sOhRa = "rgba(255, 195, 155, 1)"
 exports.sHoney = "rgba(245, 230, 100, 1)"
