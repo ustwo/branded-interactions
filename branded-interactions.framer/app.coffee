@@ -221,6 +221,23 @@ presets.snapToPage(allPresets[3], false)
 presets.currentPage.opacity = 1
 
 
+# -----------------------------
+# left side: reset, save
+# -----------------------------
+
+reset = new Layer
+	superLayer: left
+	html: "reset"
+
+save = new Layer
+	superLayer: left
+	x: reset.x + 200
+	html: "save"
+
+actions = [reset, save]
+for layer in actions
+	layer.opacity = 0
+
 # ------------------------------------------------------
 # right side: pages, indicators, save
 # ------------------------------------------------------
@@ -503,6 +520,8 @@ updateCurve = (preset) ->
 	springCurve = "spring(#{preset.tension}, #{preset.friction}, #{preset.velocity})"
 # 	push the new springCurve to the states, and animate
 	pushStates()
+	for layer in actions
+		layer.opacity = 0
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -523,9 +542,35 @@ for i in allSliders
 	
 	# if th knob has been moved, then custom changes have been made
 	i.knob.on Events.DragEnd, ->
-		presets.snapToPage(custom)
+		
 		pushStates()
+# 		presets.snapToPage(custom)
+		for layer in actions
+			layer.opacity = 1
+			
+save.on Events.Click, ->
+# 	pushStates()
+	presets.snapToPage(custom)
+	
+reset.on Events.Click, ->
+	if presets.currentPage is sluggish
+		updateCurve(sluggish)
+	else if presets.currentPage is slow
+		updateCurve(slow)
+	else if presets.currentPage is smooth
+		updateCurve(smooth)
+	else if presets.currentPage is dynamic
+		updateCurve(dynamic)
+	else if presets.currentPage is snappy
+		updateCurve(snappy)
+	else if presets.currentPage is blitz
+		updateCurve(blitz)
+	else if presets.currentPage is custom
+		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
+	else # edge-cases, default speed
+		updateCurve(dynamic)
 
+		
 presets.on "change:currentPage", ->
 	# animate out previousPage
 	presets.previousPage.animate
