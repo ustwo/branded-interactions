@@ -57,6 +57,7 @@ left = new Layer
 # -----------------------------
 # slider sizing to reference later
 sliderWidth = left.width/2
+sliderWidth = left.width * 0.4
 sliderSize =
 	width: sliderWidth
 	height: 24
@@ -64,7 +65,7 @@ sliderGutter = sliderSize.height * 5
 
 # all sliders
 sliderCanvas = new Layer
-	width: sliderWidth
+	width: left.width/2
 	height: (sliderSize.height * 3) + (sliderGutter * 2)
 	midX: left.width/2, midY: left.height/2
 	backgroundColor: null
@@ -92,7 +93,9 @@ allSliders = []
 for i in [0..2]
 	slider = new SliderComponent
 		y: i * (sliderSize.height + sliderGutter)
-		width: sliderWidth, height: sliderSize.height
+# 		width: left.width * 0.4
+		width: sliderWidth
+# 		height: sliderSize.height
 		backgroundColor: white20
 		knobSize: 48
 		min: 0
@@ -100,6 +103,7 @@ for i in [0..2]
 		pixelAlign: true
 		superLayer: sliderCanvas
 		style: presetStyle
+		midX: sliderCanvas.width/2
 	slider.knob.draggable.momentum = false
 	slider.fill.backgroundColor = white80
 	allSliders.push(slider)
@@ -123,6 +127,42 @@ friction.value = 50
 
 velocity.max = 100
 velocity.value = 50
+
+# -----------------------------
+# images
+sliderLabels = []
+sliderLabelGutter = 60
+
+friction0 = new Layer
+	width: 79, height: 20
+	midY: friction.midY, x: -sliderLabelGutter
+	image: "images/sliders/friction0.png"
+friction1 = new Layer
+	width: 79, height: 25
+	midY: friction.midY, x: friction.width + sliderLabelGutter * 1.3
+	image: "images/sliders/friction1.png"
+tension0 = new Layer
+	width: 79, height: 29
+	midY: tension.midY, x: -sliderLabelGutter
+	image: "images/sliders/tension0.png"
+tension1 = new Layer
+	width: 79, height: 34
+	midY: tension.midY, x: tension.width + sliderLabelGutter * 1.3
+	image: "images/sliders/tension1.png"
+velocity0 = new Layer
+	width: 79, height: 37
+	midY: velocity.midY, x: -sliderLabelGutter
+	image: "images/sliders/velocity0.png"
+velocity1 = new Layer
+	width: 79, height: 64
+	midY: velocity.midY, x: velocity.width + sliderLabelGutter * 1.3
+	image: "images/sliders/velocity1.png"
+	
+sliderLabels.push(friction0, friction1, tension0, tension1, velocity0, velocity1)
+
+for label in sliderLabels
+	label.scale = 0.5
+	label.superLayer = sliderCanvas
 
 # -----------------------------
 # slider logic: spring
@@ -249,18 +289,31 @@ for layer in actions
 	layer.backgroundColor = black20
 	layer.style = presetStyle
 	
-	layer.scale = 0.2
+	layer.scale = 0.5
 	layer.opacity = 0
 	
 	layer.states.add
 		active: scale: 1, opacity: 1
+	layer.states.animationOptions =
+		time: 0.1
+		curve: "ease"
 	
 saved = new Layer
-	superLayer: left
-	midX: left.width/2
+	superLayer: actionsHolder
+	width: actionsHolder.width * 0.75
+	midX: actionsHolder.width/2, height: actionsHolder.height
+	borderRadius: 8
+	backgroundColor: black20
 	html: "saved!"
 	opacity: 0
+	scale: 0.5
+	style: presetStyle
 	
+saved.states.add
+	active: scale: 1, opacity: 1
+saved.states.animationOptions =
+		time: 0.1
+		curve: "ease"
 	
 # -----------------------------
 # left side: custom logic save
@@ -268,27 +321,35 @@ saved = new Layer
 savedScroll = new ScrollComponent
 	width: sliderHolder.width
 	height: left.height * 0.22
-	midX: left.width/2, y: sliderHolder.maxY * 1.05
+	midX: left.width/2, y: left.height + 75
 	borderRadius: 8
 	backgroundColor: white20
 	scrollHorizontal: false
-	opacity: 0
+# 	visible: false
 savedScroll.contentInset =
 	top: 20, bottom: 20
 
+savedScroll.content.backgroundColor = null
+savedScroll.html = "No saved interactions yet!"
+savedScroll.style = presetStyle
+
+savedScroll.states.add
+	active: y: sliderHolder.maxY * 1.05, opacity: 1
 
 savedCurves = []
 
-for i in [0..6]
-	i = new Layer
-		superLayer: savedScroll.content
-		backgroundColor: "#fff", opacity: 0.8
-		borderRadius: 4
-		width: savedScroll.width-40
-		height: 100
-		x: 20
-		y: 120 * i
-	savedCurves.push(i)
+savedCurvesStyle = (layer) ->
+	layer.superLayer = savedScroll.content
+	layer.backgroundColor = "#fff"
+	layer.opacity = 0.8
+	layer.borderRadius = 4
+	layer.height = 100
+	layer.x = 20
+	layer.y = 120 * i
+	layer.width = savedScroll.width-40
+	layer.height = 100
+	savedCurves.push(layer)
+# 	print savedCurves
 
 # ------------------------------------------------------
 # right side: pages, indicators, save
@@ -578,7 +639,7 @@ updateCurve = (preset) ->
 	for layer in actions
 		layer.states.switch("default")
 		
-	savedScroll.opacity = 0
+	savedScroll.states.switch("default")
 		
 updateAllCurves = ->
 	if presets.currentPage is sluggish
@@ -596,11 +657,8 @@ updateAllCurves = ->
 	else if presets.currentPage is custom
 		# update background color
 		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
-		# hide save/reset options
-		for layer in actions
-			layer.states.switch("default")
 		# show saved custom curves
-		savedScroll.opacity = 1
+		savedScroll.states.switch("active")
 	else # edge-cases, default speed
 		updateCurve(dynamic)
 
@@ -624,7 +682,10 @@ for i in allSliders
 	# if th knob has been moved, then custom changes have been made
 	i.knob.on Events.DragEnd, ->
 		pushStates()
-# 		unless presets.currentPage is custom
+		
+		# hide saved! confirmation
+		saved.states.switch("default")
+		
 		for layer in actions
 			layer.states.switch("active")
 
@@ -633,20 +694,26 @@ for i in allSliders
 # save event
 # -----------------------------				
 save.on Events.Click, ->
-# 	pushStates()
 	presets.snapToPage(custom)
+	# hide save/reset options	
+	for layer in actions
+		layer.states.switch("default")
+	
 	Utils.delay 0.5, ->
-		saved.opacity = 1
+		saved.states.switch("active")
 	Utils.delay 3, ->
-		saved.opacity = 0
+		saved.states.switch("default")
 		
 	# add to savedScroll
 	for layer in savedCurves
 		layer.y += 120
-	i = new Layer
+		
+	newSave = new Layer
 		superLayer: savedScroll.content
 		index: 0
-	savedCurves.push(i)
+	savedCurvesStyle(newSave)
+	savedScroll.html = ""
+	
 	savedScroll.updateContent()
 	
 reset.on Events.Click, ->
@@ -687,5 +754,20 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
-# Utils.interval 0.5, ->
+Utils.interval 0.5, ->
 # 	print springCurve
+
+# if savedCurves.length is 0
+# 	print "hi"
+# if savedCurves.length is 1
+# 	print "one"
+# 
+# if savedCurves.length isnt 0
+# 	savedScroll.states.switch("active")
+# 	noSaved.opacity = 0
+# 	print "at least one here..."
+
+# if savedCurves.length is 0
+# 	savedScroll.states.switch("default")
+# else 
+# 	savedScroll.states.switch("active")
