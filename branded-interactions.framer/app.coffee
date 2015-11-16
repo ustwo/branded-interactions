@@ -460,8 +460,6 @@ canvas.on Events.Click, ->
 	for i in interactionsTargets
 		i.states.next()
 
-right.snapToPage(rightTwo, false)
-
 # ------------------------------------------------------
 # overall functions, settings
 # ------------------------------------------------------
