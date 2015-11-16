@@ -237,6 +237,41 @@ save = new Layer
 actions = [reset, save]
 for layer in actions
 	layer.opacity = 0
+	
+saved = new Layer
+	superLayer: left
+	midX: left.width/2
+	html: "saved!"
+	opacity: 0
+	
+	
+# -----------------------------
+# left side: custom logic save
+# -----------------------------	
+savedScroll = new ScrollComponent
+	width: sliderHolder.width
+	height: left.height * 0.22
+	midX: left.width/2, y: sliderHolder.maxY * 1.05
+	borderRadius: 8
+	backgroundColor: white20
+	scrollHorizontal: false
+	opacity: 0
+savedScroll.contentInset =
+	top: 20, bottom: 20
+
+
+savedCurves = []
+
+for i in [0..6]
+	i = new Layer
+		superLayer: savedScroll.content
+		backgroundColor: "#fff", opacity: 0.8
+		borderRadius: 4
+		width: savedScroll.width-40
+		height: 100
+		x: 20
+		y: 120 * i
+	savedCurves.push(i)
 
 # ------------------------------------------------------
 # right side: pages, indicators, save
@@ -247,6 +282,9 @@ right = new PageComponent
 	scrollVertical: false
 	backgroundColor: nonBlack
 	velocityThreshold: 2
+	
+right.content.draggable.directionLock = true
+# right.content.draggable.directionLockThreshold = {x:205, y:205}
 
 # array that will store our right page layers
 rightPages = []
@@ -522,6 +560,32 @@ updateCurve = (preset) ->
 	pushStates()
 	for layer in actions
 		layer.opacity = 0
+		
+	savedScroll.opacity = 0
+		
+updateAllCurves = ->
+	if presets.currentPage is sluggish
+		updateCurve(sluggish)
+	else if presets.currentPage is slow
+		updateCurve(slow)
+	else if presets.currentPage is smooth
+		updateCurve(smooth)
+	else if presets.currentPage is dynamic
+		updateCurve(dynamic)
+	else if presets.currentPage is snappy
+		updateCurve(snappy)
+	else if presets.currentPage is blitz
+		updateCurve(blitz)
+	else if presets.currentPage is custom
+		# update background color
+		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
+		# hide save/reset options
+		for layer in actions
+			layer.opacity = 0
+		# show saved custom curves
+		savedScroll.opacity = 1
+	else # edge-cases, default speed
+		updateCurve(dynamic)
 
 # ------------------------------------------------------
 # left side: sliders changes, presets changes
@@ -542,35 +606,40 @@ for i in allSliders
 	
 	# if th knob has been moved, then custom changes have been made
 	i.knob.on Events.DragEnd, ->
-		
 		pushStates()
 # 		presets.snapToPage(custom)
-		for layer in actions
-			layer.opacity = 1
-			
+		unless presets.currentPage is custom
+			for layer in actions
+				layer.opacity = 1
+
+
+# -----------------------------
+# save event
+# -----------------------------				
 save.on Events.Click, ->
 # 	pushStates()
 	presets.snapToPage(custom)
+	Utils.delay 0.5, ->
+		saved.opacity = 1
+	Utils.delay 3, ->
+		saved.opacity = 0
+		
+	# add to savedScroll
+	for layer in savedCurves
+		layer.y += 120
+	i = new Layer
+		superLayer: savedScroll.content
+		index: 0
+	savedCurves.push(i)
+	savedScroll.updateContent()
 	
 reset.on Events.Click, ->
-	if presets.currentPage is sluggish
-		updateCurve(sluggish)
-	else if presets.currentPage is slow
-		updateCurve(slow)
-	else if presets.currentPage is smooth
-		updateCurve(smooth)
-	else if presets.currentPage is dynamic
-		updateCurve(dynamic)
-	else if presets.currentPage is snappy
-		updateCurve(snappy)
-	else if presets.currentPage is blitz
-		updateCurve(blitz)
-	else if presets.currentPage is custom
-		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
-	else # edge-cases, default speed
-		updateCurve(dynamic)
+	updateAllCurves()
 
-		
+
+# -----------------------------
+# page change
+# -----------------------------			
 presets.on "change:currentPage", ->
 	# animate out previousPage
 	presets.previousPage.animate
@@ -584,22 +653,7 @@ presets.on "change:currentPage", ->
 		time: 0.4
 	
 	# update curve
-	if presets.currentPage is sluggish
-		updateCurve(sluggish)
-	else if presets.currentPage is slow
-		updateCurve(slow)
-	else if presets.currentPage is smooth
-		updateCurve(smooth)
-	else if presets.currentPage is dynamic
-		updateCurve(dynamic)
-	else if presets.currentPage is snappy
-		updateCurve(snappy)
-	else if presets.currentPage is blitz
-		updateCurve(blitz)
-	else if presets.currentPage is custom
-		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
-	else # edge-cases, default speed
-		updateCurve(dynamic)
+	updateAllCurves()
 
 # ------------------------------------------------------
 # right side: changes
