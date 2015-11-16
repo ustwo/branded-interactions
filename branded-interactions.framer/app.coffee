@@ -225,18 +225,35 @@ presets.currentPage.opacity = 1
 # left side: reset, save
 # -----------------------------
 
-reset = new Layer
+actionsHolder = new Layer
+	width: sliderHolder.width, height: 150
 	superLayer: left
+	midX: left.width/2, y: left.height * 0.1
+	backgroundColor: null, clip: false
+	
+reset = new Layer
+	superLayer: actionsHolder
 	html: "reset"
+	width: actionsHolder.width/3, height: actionsHolder.height
 
 save = new Layer
-	superLayer: left
-	x: reset.x + 200
+	superLayer: actionsHolder
+	x: reset.maxX + 20
 	html: "save"
+	width: ((actionsHolder.width/3) * 2 - 20), height: actionsHolder.height
 
 actions = [reset, save]
 for layer in actions
+# 	layer.opacity = 1
+	layer.borderRadius = 8
+	layer.backgroundColor = black20
+	layer.style = presetStyle
+	
+	layer.scale = 0.2
 	layer.opacity = 0
+	
+	layer.states.add
+		active: scale: 1, opacity: 1
 	
 saved = new Layer
 	superLayer: left
@@ -559,7 +576,7 @@ updateCurve = (preset) ->
 # 	push the new springCurve to the states, and animate
 	pushStates()
 	for layer in actions
-		layer.opacity = 0
+		layer.states.switch("default")
 		
 	savedScroll.opacity = 0
 		
@@ -581,7 +598,7 @@ updateAllCurves = ->
 		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
 		# hide save/reset options
 		for layer in actions
-			layer.opacity = 0
+			layer.states.switch("default")
 		# show saved custom curves
 		savedScroll.opacity = 1
 	else # edge-cases, default speed
@@ -607,10 +624,9 @@ for i in allSliders
 	# if th knob has been moved, then custom changes have been made
 	i.knob.on Events.DragEnd, ->
 		pushStates()
-# 		presets.snapToPage(custom)
-		unless presets.currentPage is custom
-			for layer in actions
-				layer.opacity = 1
+# 		unless presets.currentPage is custom
+		for layer in actions
+			layer.states.switch("active")
 
 
 # -----------------------------
