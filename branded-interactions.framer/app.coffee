@@ -729,10 +729,10 @@ class Item extends Layer
 				this.input.focus()
 				
 # create dummy list items
-for i in [0..3]
-	list = new Item
-	list.y += 120 * i
-	allItems.push(list)
+# for i in [0..3]
+# 	list = new Item
+# 	list.y += 120 * i
+# 	allItems.push(list)
 		
 		
 save.on Events.Click, ->
@@ -746,6 +746,26 @@ save.on Events.Click, ->
 	Utils.delay 3, ->
 		saved.states.switch("default")
 		
+		
+	# Check if the last item isn't empty
+	lastItem = allItems[allItems.length - 1]
+	
+	newItem = new Item	height: 0
+	newItem.index = -allItems.length + 3
+	newItem.input.focus()
+	
+	newItem.animate
+		properties: height: 100
+		curve: "spring(400, 30, 0)"
+		
+	for item in allItems
+		item.animate
+			properties: y: item.y + 120
+			curve: "spring(400, 30, 0)"
+			
+	allItems.push(newItem)
+# 	update()
+		
 	# add to savedScroll
 # 	for layer in savedCurves
 # 		layer.y += 120
@@ -757,7 +777,6 @@ save.on Events.Click, ->
 # 	savedScroll.html = ""
 # 	
 # 	savedScroll.updateContent()
-	newItem = new Item
 	
 	
 	
