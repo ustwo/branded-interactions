@@ -21,3 +21,7 @@ exports.snappyVelocity = 0
 exports.blitzTension = 620
 exports.blitzFriction = 20
 exports.blitzVelocity = 10
+
+exports.customTension = 500
+exports.customFriction = 50
+exports.customVelocity = 50

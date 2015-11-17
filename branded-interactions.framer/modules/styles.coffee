@@ -25,3 +25,12 @@ exports.presetStyle =
 	"color": exports.white80
 # 	"padding": "10pt 60pt"
 	"background-color": exports.black20
+
+exports.itemStyle =
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	# "line-height": "600px"
+	"padding": "35px 50px 0"
+	# "text-align": "center"
+	"text-transform": "lowercase"
+	"color": exports.black50
