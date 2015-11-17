@@ -703,37 +703,40 @@ class Item extends Layer
 		options.height ?= 100
 		options.x ?= 20
 		options.y ?= 0
+		
+		options.style = itemStyle
 			
 		super options
 		
-		this.input = document.createElement("input")
-		this._element.appendChild(this.input)
+# 		this.input = document.createElement("input")
+# 		this._element.appendChild(this.input)
 		
-		this.input.style.font = "400 34px/1.25 SF UI Text, Helvetica Neue"
-		this.input.style.outline = "none"
-		this.input.style.backgroundColor = "transparent"
-		this.input.style.height = "200px"
-		this.input.style.width = "#{this.width}px"
-		this.input.style.margin = "50px 0 0 148px"
+# 		this.input.style.font = "400 34px/1.25 SF UI Text, Helvetica Neue"
+# 		this.input.style.outline = "none"
+# 		this.input.style.backgroundColor = "transparent"
+# 		this.input.style.height = "200px"
+# 		this.input.style.width = "#{this.width}px"
+# 		this.input.style.margin = "50px 0 0 148px"
 		
-		this.input.onfocus = -> document.body.scrollTop = 0
+# 		this.input.onfocus = -> document.body.scrollTop = 0
 		
-		savedScroll.on Events.ScrollMove, =>
-			this.ignoreEvents = true
-			this.input.blur()
-		savedScroll.on Events.ScrollAnimationDidEnd, => 
-			savedScroll.on Events.TouchEnd, =>
-				this.ignoreEvents = false	
-		this.on Events.TouchEnd, ->
-			unless savedScroll.isMoving
-				this.input.focus()
+# 		savedScroll.on Events.ScrollMove, =>
+# 			this.ignoreEvents = true
+# 			this.input.blur()
+# 		savedScroll.on Events.ScrollAnimationDidEnd, => 
+# 			savedScroll.on Events.TouchEnd, =>
+# 				this.ignoreEvents = false	
+# 		this.on Events.TouchEnd, ->
+# 			unless savedScroll.isMoving
+# 				this.input.focus()
 				
 # create dummy list items
 # for i in [0..3]
 # 	list = new Item
 # 	list.y += 120 * i
 # 	allItems.push(list)
-		
+
+
 		
 save.on Events.Click, ->
 	presets.snapToPage(custom)
@@ -752,11 +755,32 @@ save.on Events.Click, ->
 	
 	newItem = new Item	height: 0
 	newItem.index = -allItems.length + 3
-	newItem.input.focus()
+# 	newItem.input.focus()
+# 	newItem.html = Utils.randomChoice(["Rando", "Miley", "Allen", "Beavis", "Oily"])
+# 	newItem.html = time
+	
+	
+	# Start displaying time
+	startTime = ->
+		date = new Date()
+		h = date.getHours()
+		m = date.getMinutes()
+		s = date.getSeconds()
+		
+		# Set time
+		newItem.html = h + ":" + m + ":" + s
+		
+		# Update the time
+# 		Utils.delay 0.5, ->
+# 			startTime()
+	
+	startTime()	
+	
 	
 	newItem.animate
 		properties: height: 100
 		curve: "spring(400, 30, 0)"
+		delay: 0.2
 		
 	for item in allItems
 		item.animate
@@ -764,21 +788,7 @@ save.on Events.Click, ->
 			curve: "spring(400, 30, 0)"
 			
 	allItems.push(newItem)
-# 	update()
-		
-	# add to savedScroll
-# 	for layer in savedCurves
-# 		layer.y += 120
-# 		
-# 	newSave = new Layer
-# 		superLayer: savedScroll.content
-# 		index: 0
-# 	savedCurvesStyle(newSave)
-# 	savedScroll.html = ""
-# 	
-# 	savedScroll.updateContent()
-	
-	
+
 	
 	
 reset.on Events.Click, ->
