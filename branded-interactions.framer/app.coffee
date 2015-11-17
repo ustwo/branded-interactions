@@ -330,26 +330,26 @@ savedScroll.contentInset =
 	top: 20, bottom: 20
 
 savedScroll.content.backgroundColor = null
-savedScroll.html = "No saved interactions yet!"
-savedScroll.style = presetStyle
-
+# savedScroll.html = "No saved interactions yet!"
+# savedScroll.style = presetStyle
+# 
 savedScroll.states.add
 	active: y: sliderHolder.maxY * 1.05, opacity: 1
+# 
+# savedCurves = []
+# 
+# savedCurvesStyle = (layer) ->
+# 	layer.superLayer = savedScroll.content
+# 	layer.backgroundColor = "#fff"
+# 	layer.opacity = 0.8
+# 	layer.borderRadius = 4
+# 	layer.height = 100
+# 	layer.x = 20
+# 	layer.y = 120 * i
+# 	layer.width = savedScroll.width-40
+# 	layer.height = 100
+# 	savedCurves.push(layer)
 
-savedCurves = []
-
-savedCurvesStyle = (layer) ->
-	layer.superLayer = savedScroll.content
-	layer.backgroundColor = "#fff"
-	layer.opacity = 0.8
-	layer.borderRadius = 4
-	layer.height = 100
-	layer.x = 20
-	layer.y = 120 * i
-	layer.width = savedScroll.width-40
-	layer.height = 100
-	savedCurves.push(layer)
-# 	print savedCurves
 
 # ------------------------------------------------------
 # right side: pages, indicators, save
@@ -692,7 +692,49 @@ for i in allSliders
 
 # -----------------------------
 # save event
-# -----------------------------				
+# -----------------------------		
+allItems = []
+class Item extends Layer
+	constructor: (options={}) ->
+		options.superLayer ?= savedScroll.content
+		options.backgroundColor ?= "rgba(255, 255, 255, 0.8)"
+		options.borderRadius ?= 6
+		options.width ?= savedScroll.width-40
+		options.height ?= 100
+		options.x ?= 20
+		options.y ?= 0
+			
+		super options
+		
+		this.input = document.createElement("input")
+		this._element.appendChild(this.input)
+		
+		this.input.style.font = "400 34px/1.25 SF UI Text, Helvetica Neue"
+		this.input.style.outline = "none"
+		this.input.style.backgroundColor = "transparent"
+		this.input.style.height = "200px"
+		this.input.style.width = "#{this.width}px"
+		this.input.style.margin = "50px 0 0 148px"
+		
+		this.input.onfocus = -> document.body.scrollTop = 0
+		
+		savedScroll.on Events.ScrollMove, =>
+			this.ignoreEvents = true
+			this.input.blur()
+		savedScroll.on Events.ScrollAnimationDidEnd, => 
+			savedScroll.on Events.TouchEnd, =>
+				this.ignoreEvents = false	
+		this.on Events.TouchEnd, ->
+			unless savedScroll.isMoving
+				this.input.focus()
+				
+# create dummy list items
+for i in [0..3]
+	list = new Item
+	list.y += 120 * i
+	allItems.push(list)
+		
+		
 save.on Events.Click, ->
 	presets.snapToPage(custom)
 	# hide save/reset options	
@@ -705,16 +747,20 @@ save.on Events.Click, ->
 		saved.states.switch("default")
 		
 	# add to savedScroll
-	for layer in savedCurves
-		layer.y += 120
-		
-	newSave = new Layer
-		superLayer: savedScroll.content
-		index: 0
-	savedCurvesStyle(newSave)
-	savedScroll.html = ""
+# 	for layer in savedCurves
+# 		layer.y += 120
+# 		
+# 	newSave = new Layer
+# 		superLayer: savedScroll.content
+# 		index: 0
+# 	savedCurvesStyle(newSave)
+# 	savedScroll.html = ""
+# 	
+# 	savedScroll.updateContent()
+	newItem = new Item
 	
-	savedScroll.updateContent()
+	
+	
 	
 reset.on Events.Click, ->
 	updateAllCurves()
@@ -754,20 +800,6 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
-Utils.interval 0.5, ->
+# Utils.interval 0.5, ->
 # 	print springCurve
 
-# if savedCurves.length is 0
-# 	print "hi"
-# if savedCurves.length is 1
-# 	print "one"
-# 
-# if savedCurves.length isnt 0
-# 	savedScroll.states.switch("active")
-# 	noSaved.opacity = 0
-# 	print "at least one here..."
-
-# if savedCurves.length is 0
-# 	savedScroll.states.switch("default")
-# else 
-# 	savedScroll.states.switch("active")
