@@ -14,3 +14,5 @@ An interal prototyping tool that allows clients to manipulate and save a series 
 - [ ] Save, edit, export functionality on custom settings
 - [x] Module-out as much as possible
 - [x] Condense rest of code (functions, arrays, all that good stuff)
+- [ ] Limit or replace horizontal scroll with left/right buttons (on right side)
+- [ ] Visualise (and live-update) spring/ease/linear graph (like the [Framer Learn](http://framerjs.com/learn/basics/animation/) examples, or [Simon's link](http://hosted.zeh.com.br/mctween/animationtypes.html))

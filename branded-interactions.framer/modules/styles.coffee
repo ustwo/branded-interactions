@@ -32,5 +32,5 @@ exports.itemStyle =
 	# "line-height": "600px"
 	"padding": "35px 50px 0"
 	# "text-align": "center"
-	"text-transform": "uppercase"
+	"text-transform": "lowercase"
 	"color": exports.black50

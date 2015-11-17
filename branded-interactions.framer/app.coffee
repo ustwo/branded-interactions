@@ -548,61 +548,117 @@ iphone = new Layer
 	image: "images/iphone.png"
 	superLayer: rightTwo
 
-canvas = new Layer
+iphoneCanvas = new Layer
 	width: right.width * 0.41
 	height: right.height * 0.49
 	backgroundColor: null
 	superLayer: rightTwo
 	clip: true
-canvas.center()
+iphoneCanvas.center()
 
 card = new Layer
-	superLayer: canvas
-	width: canvas.width * 0.9
-	height: canvas.height * 0.84
-	midX: canvas.width/2
+	superLayer: iphoneCanvas
+	width: iphoneCanvas.width * 0.9
+	height: iphoneCanvas.height * 0.84
+	midX: iphoneCanvas.width/2
 	y: 100
 	borderRadius: 6
 	backgroundColor: white
 	opacity: 0.5
 
 card.states.add
-	second: midX: canvas.width * 0.75, scale: 0.66, height: canvas.height, midY: (canvas.height/2) * 1.05, opacity: 0.2
+	second: midX: iphoneCanvas.width * 0.75, scale: 0.66, height: iphoneCanvas.height, midY: (iphoneCanvas.height/2) * 1.05, opacity: 0.2
 interactionsTargets.push(card)
 	
 plus = new Layer
-	superLayer: canvas
-	x: canvas.width * 0.058
-	y: canvas.height * 0.035
+	superLayer: iphoneCanvas
+	x: iphoneCanvas.width * 0.058
+	y: iphoneCanvas.height * 0.035
 	width: 36, height: 36
 	image: "images/plus.png"
 plus.states.add
-	second: rotation: 135, maxX: canvas.width * (1-0.058)
+	second: rotation: 135, maxX: iphoneCanvas.width * (1-0.058)
 interactionsTargets.push(plus)
 
 	
 newCards = []	
 for newCard in [0..2]
 	newCard = new Layer
-		superLayer: canvas
-		width: canvas.width * 0.44
-		height: canvas.height * 0.35
-		maxX: - ((canvas.width * 0.44) * (newCard) + 75)
-		y: newCard * ((canvas.height * 0.35) + 50) - 75
+		superLayer: iphoneCanvas
+		width: iphoneCanvas.width * 0.44
+		height: iphoneCanvas.height * 0.35
+		maxX: - ((iphoneCanvas.width * 0.44) * (newCard) + 75)
+		y: newCard * ((iphoneCanvas.height * 0.35) + 50) - 75
 		borderRadius: 6
 		backgroundColor: white
 		opacity: 0.2
 		
 	newCard.states.add
-		second: x: - (canvas.width * 0.44) * 0.4, opacity: 0.5
+		second: x: - (iphoneCanvas.width * 0.44) * 0.4, opacity: 0.5
 	
 	interactionsTargets.push(newCard)	
 	newCards.push(newCard)
 
-canvas.on Events.Click, ->
+iphoneCanvas.on Events.Click, ->
 	for i in interactionsTargets
 		i.states.next()
 
+# -----------------------------
+# right side: appleWatch #1
+# -----------------------------
+appleWatch = new Layer
+	width: 593, height: 1014
+	image: "images/appleWatch.png"
+	midX: rightOne.width/2, midY: rightOne.height/2
+	scale: 0.65, opacity: 0.1
+	superLayer: rightThree
+	
+watchCanvas = new Layer
+	width: right.width * 0.23
+	height: right.height * 0.19
+	backgroundColor: null
+	superLayer: rightThree
+	clip: true
+watchCanvas.centerY()
+watchCanvas.centerX(-10)
+
+notificationCard = new Layer
+	superLayer: watchCanvas
+	width: watchCanvas.width * 0.9, height: 200
+	borderRadius: 10
+	backgroundColor: white20
+	midX: watchCanvas.width/2, y: watchCanvas.height * 1.1
+	
+notificationCard.states.add
+	first: y: 50
+interactionsTargets.push(notificationCard)	
+
+notificationDot = new Layer
+	superLayer: watchCanvas
+	width: 160, height: 160, borderRadius: "50%"
+	backgroundColor: white
+	opacity: 0.75
+	midX: watchCanvas.width/2, midY: watchCanvas.height * 0.4
+	
+notificationDot.states.add
+	first: scale: 0.45, x: - watchCanvas.width * 0.08, y: - watchCanvas.height * 0.1
+interactionsTargets.push(notificationDot)
+
+notificationText = new Layer
+	superLayer: watchCanvas
+	width: 120, height: 16, borderRadius: 4
+	backgroundColor: white, opacity: 0.3
+	midX: watchCanvas.width/2, y: notificationDot.maxY + 30
+notificationText.states.add
+	second: opacity: 0, scale: 0.3, x: 10, y: 60
+interactionsTargets.push(notificationText)	
+		
+
+watchCanvas.on Events.Click, ->
+	for i in interactionsTargets
+		i.states.next()
+
+	
 # ------------------------------------------------------
 # overall functions, settings
 # ------------------------------------------------------
@@ -705,11 +761,20 @@ class Item extends Layer
 		options.y ?= 0
 		
 		options.style = itemStyle
+		
+		options.springCurve ?= springCurve
 			
 		super options
+		
+
+	
 
 		
 save.on Events.Click, ->
+	
+	# 1. save springCurve to an array
+	# 2. re-render ScrollComponent
+	
 	presets.snapToPage(custom)
 	# hide save/reset options	
 	for layer in actions
@@ -737,7 +802,7 @@ save.on Events.Click, ->
 # 	newItem.html = h + ":" + m + ":" + s + " / " + springCurve
 	newItem.html = springCurve
 
-
+# 	print springCurve + " test"
 	
 	
 	newItem.animate
@@ -792,6 +857,5 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
-Utils.interval 0.5, ->
-	print springCurve
-
+# Utils.interval 0.5, ->
+# 	print springCurve
