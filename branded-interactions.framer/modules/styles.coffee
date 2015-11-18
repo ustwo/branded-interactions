@@ -6,6 +6,7 @@ exports.white80 = "rgba(255, 255, 255, 0.8)"
 exports.white20 = "rgba(255, 255, 255, 0.2)"
 exports.black50 = "rgba(0, 0, 0, 0.5)"
 exports.black20 = "rgba(0, 0, 0, 0.2)"
+exports.black10 = "rgba(0, 0, 0, 0.1)"
 exports.transparent = "rgba(0, 0, 0, 0)"
 
 exports.squareStyle =
@@ -34,3 +35,24 @@ exports.itemStyle =
 	# "text-align": "center"
 	"text-transform": "lowercase"
 	"color": exports.black50
+
+exports.resetStyle =
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	"line-height": "150px"
+	"padding-left": "116px"
+	"text-transform": "uppercase"
+
+exports.saveStyle =
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	"line-height": "150px"
+	"padding-left": "218px"
+	"text-transform": "uppercase"
+
+exports.savedStyle =
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	"line-height": "150px"
+	"padding-left": "254px"
+	"text-transform": "uppercase"

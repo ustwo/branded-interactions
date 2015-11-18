@@ -1,5 +1,5 @@
 # Branded Interactions
-An interal prototyping tool that allows clients to build out visual cues for how their brand might play out as a series of screen-based interactions. 
+An interal prototyping tool that allows clients to build out visual cues for how their brand might play out as a series of screen-based interactions.
 
 ##### Why?
 To facilitate the building out the mood and tone of their brand on screen-based interactions, alongside other branding considerations.
@@ -37,3 +37,5 @@ We'd like to facilitate workshops with clients that allow them explore and solid
 - [x] Condense rest of code (functions, arrays, all that good stuff)
 - [ ] Limit or replace horizontal scroll with left/right buttons (on right side)
 - [ ] Visualise (and live-update) spring/ease/linear graph (like the [Framer Learn](http://framerjs.com/learn/basics/animation/) examples, or [Simon's link](http://hosted.zeh.com.br/mctween/animationtypes.html))
+- [ ] Remove or modify 'reset' button on custom page/screen
+- [ ] Fix `savedScroll` bottom margin quirk

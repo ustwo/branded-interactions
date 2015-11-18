@@ -273,22 +273,36 @@ actionsHolder = new Layer
 	
 reset = new Layer
 	superLayer: actionsHolder
+	backgroundColor: black10
 	html: "reset"
+	style: resetStyle
 	width: actionsHolder.width/3, height: actionsHolder.height
+	
+resetImg = new Layer
+	superLayer: reset
+	midY: reset.height/2, x: 48
+	width: 48, height: 43
+	image: "images/reset.png"
 
 save = new Layer
 	superLayer: actionsHolder
+	backgroundColor: black10
 	x: reset.maxX + 20
 	html: "save"
+	style: saveStyle
 	width: ((actionsHolder.width/3) * 2 - 20), height: actionsHolder.height
-
+	
+saveImg = new Layer
+	superLayer: save
+	midY: save.height/2, x: 150
+	width: 48, height: 43
+	image: "images/save.png"
+	
 actions = [reset, save]
 for layer in actions
 # 	layer.opacity = 1
 	layer.borderRadius = 8
-	layer.backgroundColor = black20
-	layer.style = presetStyle
-	
+# 	layer.style = actionStyle
 	layer.scale = 0.5
 	layer.opacity = 0
 	
@@ -303,12 +317,17 @@ saved = new Layer
 	width: actionsHolder.width * 0.75
 	midX: actionsHolder.width/2, height: actionsHolder.height
 	borderRadius: 8
-	backgroundColor: black20
+	backgroundColor: black10
 	html: "saved!"
 	opacity: 0
 	scale: 0.5
-	style: presetStyle
-	
+	style: savedStyle
+savedImg = new Layer
+	superLayer: saved
+	midY: save.height/2, x: 184
+	width: 48, height: 36
+	image: "images/saved.png"
+		
 saved.states.add
 	active: scale: 1, opacity: 1
 saved.states.animationOptions =
@@ -325,7 +344,6 @@ savedScroll = new ScrollComponent
 	borderRadius: 8
 	backgroundColor: white20
 	scrollHorizontal: false
-# 	visible: false
 savedScroll.contentInset =
 	top: 20, bottom: 20
 
@@ -335,20 +353,6 @@ savedScroll.content.backgroundColor = null
 # 
 savedScroll.states.add
 	active: y: sliderHolder.maxY * 1.05, opacity: 1
-# 
-# savedCurves = []
-# 
-# savedCurvesStyle = (layer) ->
-# 	layer.superLayer = savedScroll.content
-# 	layer.backgroundColor = "#fff"
-# 	layer.opacity = 0.8
-# 	layer.borderRadius = 4
-# 	layer.height = 100
-# 	layer.x = 20
-# 	layer.y = 120 * i
-# 	layer.width = savedScroll.width-40
-# 	layer.height = 100
-# 	savedCurves.push(layer)
 
 
 # ------------------------------------------------------
@@ -715,6 +719,9 @@ updateAllCurves = ->
 		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
 		# show saved custom curves
 		savedScroll.states.switch("active")
+		# hide reset/save buttons
+		for layer in actions
+			layer.states.switch("default")
 	else # edge-cases, default speed
 		updateCurve(dynamic)
 
@@ -768,59 +775,71 @@ class Item extends Layer
 		
 
 	
-
-		
-save.on Events.Click, ->
+save.on Events.TouchStart, ->
+	save.animate
+		properties: scale: 0.65
+		curve: "spring(400, 30, 0)"
+save.on Events.TouchEnd, ->
+	save.animate
+		properties: scale: 1
+		curve: "spring(400, 30, 0)"
 	
 	# 1. save springCurve to an array
 	# 2. re-render ScrollComponent
-	
-	presets.snapToPage(custom)
-	# hide save/reset options	
-	for layer in actions
-		layer.states.switch("default")
-	Utils.delay 0.5, ->
-		saved.states.switch("active")
-	Utils.delay 3, ->
-		saved.states.switch("default")
-		
-		
-	# Check if the last item isn't empty
-	lastItem = allItems[allItems.length - 1]
-	
-	newItem = new Item	height: 0
-	newItem.index = -allItems.length + 3
-# 	newItem.html = Utils.randomChoice(["Rando", "Miley", "Allen", "Beavis", "Oily"])
-	
-	
-	# Start displaying time
-	date = new Date()
-	h = date.getHours()
-	m = date.getMinutes()
-	s = date.getSeconds()
-	# Set time
-# 	newItem.html = h + ":" + m + ":" + s + " / " + springCurve
-	newItem.html = springCurve
-
-# 	print springCurve + " test"
-	
-	
-	newItem.animate
-		properties: height: 100
-		curve: "spring(400, 30, 0)"
-		delay: 0.2
-		
-	for item in allItems
-		item.animate
-			properties: y: item.y + 120
-			curve: "spring(400, 30, 0)"
+	Utils.delay 0.25, ->
+		presets.snapToPage(custom)
+		# hide save/reset options	
+		for layer in actions
+			layer.states.switch("default")
+		Utils.delay 0.5, ->
+			saved.states.switch("active")
+		Utils.delay 3, ->
+			saved.states.switch("default")
 			
-	allItems.push(newItem)
+			
+		# Check if the last item isn't empty
+		lastItem = allItems[allItems.length - 1]
+		
+		newItem = new Item	height: 0
+		newItem.index = -allItems.length + 3
+	# 	newItem.html = Utils.randomChoice(["Rando", "Miley", "Allen", "Beavis", "Oily"])
+		
+		
+		# Start displaying time
+		date = new Date()
+		h = date.getHours()
+		m = date.getMinutes()
+		s = date.getSeconds()
+		# Set time
+	# 	newItem.html = h + ":" + m + ":" + s + " / " + springCurve
+		newItem.html = springCurve
+	
+	# 	print springCurve + " test"
+		
+		
+		newItem.animate
+			properties: height: 100
+			curve: "spring(400, 30, 0)"
+			delay: 0.2
+			
+		for item in allItems
+			item.animate
+				properties: y: item.y + 120
+				curve: "spring(400, 30, 0)"
+				
+		allItems.push(newItem)
 
-	
-	
-reset.on Events.Click, ->
-	updateAllCurves()
+reset.on Events.TouchStart, ->
+	reset.animate
+		properties: scale: 0.65
+		curve: "spring(400, 30, 0)"
+		
+reset.on Events.TouchEnd, ->
+	reset.animate
+		properties: scale: 1
+		curve: "spring(400, 30, 0)"
+	Utils.delay 0.25, ->
+		updateAllCurves()
 
 
 # -----------------------------
