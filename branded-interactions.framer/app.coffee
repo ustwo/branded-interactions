@@ -51,37 +51,35 @@ bg = new BackgroundLayer
 left = new Layer
 	width: Screen.width/2, height: Screen.height
 	backgroundColor: pot # match first present colour
+	
+# wrapper for changing left components
+leftWrapper = new Layer
+	superLayer: left
+	size: left.size
+	backgroundColor: null
 
 # -----------------------------
 # left side: slider setup
 # -----------------------------
 # slider sizing to reference later
-sliderWidth = left.width/2
-sliderWidth = left.width * 0.4
+# sliderWidth = left.width/2
+# sliderWidth = left.width * 0.4
 sliderSize =
-	width: sliderWidth
-	height: 24
+	width: left.width * 0.4
+	height: 12
 sliderGutter = sliderSize.height * 5
+sliderGutter = 24 * 5
+
+
 
 # all sliders
 sliderCanvas = new Layer
-	width: left.width/2
-	height: (sliderSize.height * 3) + (sliderGutter * 2)
-	midX: left.width/2, midY: left.height/2
-	backgroundColor: null
-	superLayer: left
+	width: (left.width/2) * 1.4
+	height: (sliderSize.height * 14) * 3 + (2 * 24)
+	midX: left.width/2, midY: left.midY
+	superLayer: leftWrapper
 	clip: false
-
-# padded box behind
-sliderHolder = new Layer
-	width: sliderCanvas.width * 1.4
-	height: sliderCanvas.height * 1.8
-	midX: sliderCanvas.midX, midY: sliderCanvas.midY
-	borderRadius: 8
-	backgroundColor: white20
-	superLayer: left
-sliderCanvas.bringToFront()
-
+	backgroundColor: null
 
 # -----------------------------
 # left side: sliders: spring
@@ -93,30 +91,28 @@ allSliders = []
 for i in [0..2]
 	slider = new SliderComponent
 		y: i * (sliderSize.height + sliderGutter)
-# 		width: left.width * 0.4
-		width: sliderWidth
-# 		height: sliderSize.height
+		width: sliderSize.width
+		height: sliderSize.height
 		backgroundColor: white20
 		knobSize: 48
 		min: 0
 # 		max: 1, value: 0.5
 		pixelAlign: true
 		superLayer: sliderCanvas
-		style: presetStyle
+# 		style: sliderStyle
 		midX: sliderCanvas.width/2
 	slider.knob.draggable.momentum = false
 	slider.fill.backgroundColor = white80
+	slider.backgroundColor = black20
 	allSliders.push(slider)
 
 # rename for easy access
 # "backwards" ordering for less headfuck for user
 # see Noah Levin spring diagram
 velocity = allSliders[0]
-velocity.html = "velocity (wind-up)"
 friction = allSliders[1]
-friction.html = "friction (weight)"
 tension = allSliders[2]
-tension.html = "tension (bounciness)"
+
 # adjust maximum values for each,
 # make value exactly half as a generic starting point
 tension.max = 1000
@@ -127,42 +123,96 @@ friction.value = 50
 
 velocity.max = 100
 velocity.value = 50
+	
+sliderCanvases = []
 
+for i in [0..2]
+	sliderPanel = new Layer
+		width: sliderCanvas.width
+		height: sliderSize.height * 14
+		y: i * (sliderSize.height * 14 + 24)
+		borderRadius: 8
+		superLayer: sliderCanvas
+		style: sliderStyle
+		backgroundColor: black10
+	sliderCanvases.push(sliderPanel)
+		
+velocitySliderCanvas = sliderCanvases[0]
+velocitySliderCanvas.html = "velocity (wind-up)"
+velocity.superLayer = velocitySliderCanvas
+velocity.midY = velocitySliderCanvas.height/2 + 30
+velocity.midX = velocitySliderCanvas.width/2
+
+frictionSliderCanvas = sliderCanvases[1]
+frictionSliderCanvas.html = "friction (weight)"
+friction.superLayer = frictionSliderCanvas
+friction.midY = frictionSliderCanvas.height/2 + 30
+friction.midX = frictionSliderCanvas.width/2
+
+tensionSliderCanvas = sliderCanvases[2]
+tensionSliderCanvas.html = "tension (bounciness)"
+tension.superLayer = tensionSliderCanvas
+tension.midY = tensionSliderCanvas.height/2 + 30
+tension.midX = tensionSliderCanvas.width/2
+
+sliderBorders = []
+for i in [0..2]
+	border = new Layer
+		width: velocitySliderCanvas.width * 0.9, height: 2
+		midX: velocitySliderCanvas.width / 2, y: 69
+		backgroundColor: white20
+	sliderBorders.push(border)
+	
+velocitySliderBorder = sliderBorders[0]
+velocitySliderBorder.superLayer = velocitySliderCanvas
+
+frictionSliderBorder = sliderBorders[1]
+frictionSliderBorder.superLayer = frictionSliderCanvas
+	
+tensionSliderBorder = sliderBorders[2]
+tensionSliderBorder.superLayer = tensionSliderCanvas
 # -----------------------------
 # images
 sliderLabels = []
-sliderLabelGutter = 60
 
 friction0 = new Layer
+	superLayer: frictionSliderCanvas
 	width: 79, height: 20
-	midY: friction.midY, x: -sliderLabelGutter
+	midY: friction.midY, x: 36
 	image: "images/sliders/friction0.png"
 friction1 = new Layer
+	superLayer: frictionSliderCanvas
 	width: 79, height: 25
-	midY: friction.midY, x: friction.width + sliderLabelGutter * 1.3
+	midY: friction.midY, maxX: frictionSliderCanvas.width - 36
 	image: "images/sliders/friction1.png"
+
 tension0 = new Layer
+	superLayer: tensionSliderCanvas
 	width: 79, height: 29
-	midY: tension.midY, x: -sliderLabelGutter
+	midY: tension.midY, x: 36
 	image: "images/sliders/tension0.png"
 tension1 = new Layer
+	superLayer: tensionSliderCanvas
 	width: 79, height: 34
-	midY: tension.midY, x: tension.width + sliderLabelGutter * 1.3
+	midY: tension.midY, maxX: tensionSliderCanvas.width - 36
 	image: "images/sliders/tension1.png"
+
 velocity0 = new Layer
+	superLayer: velocitySliderCanvas
 	width: 79, height: 37
-	midY: velocity.midY, x: -sliderLabelGutter
+	midY: velocity.midY, x: 36
 	image: "images/sliders/velocity0.png"
 velocity1 = new Layer
+	superLayer: velocitySliderCanvas
 	width: 79, height: 64
-	midY: velocity.midY, x: velocity.width + sliderLabelGutter * 1.3
+	midY: velocity.midY, maxX: velocitySliderCanvas.width - 36
 	image: "images/sliders/velocity1.png"
 	
 sliderLabels.push(friction0, friction1, tension0, tension1, velocity0, velocity1)
 
 for label in sliderLabels
-	label.scale = 0.5
-	label.superLayer = sliderCanvas
+	label.scale = 0.6
+	label.opacity = 0.2
 
 # -----------------------------
 # slider logic: spring
@@ -179,11 +229,11 @@ springCurve = "spring(#{tension.value}, #{friction.value}, #{velocity.value})"
 # left side: presets (pages)
 # -----------------------------
 presets = new PageComponent
-	midX: sliderHolder.midX, maxY: sliderHolder.y - 50
-	width: sliderHolder.width
+	midX: sliderCanvas.midX, maxY: sliderCanvas.y - 48
+	width: sliderCanvas.width
 	height: 100
 	scrollVertical: false
-	superLayer: left
+	superLayer: leftWrapper
 
 allPresets = []
 # Create layers in a for-loop
@@ -266,9 +316,9 @@ presets.currentPage.opacity = 1
 # -----------------------------
 
 actionsHolder = new Layer
-	width: sliderHolder.width, height: 150
-	superLayer: left
-	midX: left.width/2, y: left.height * 0.1
+	width: sliderCanvas.width, height: 150
+	superLayer: leftWrapper
+	midX: left.width/2, maxY: presets.y - 48
 	backgroundColor: null, clip: false
 	
 reset = new Layer
@@ -338,21 +388,35 @@ saved.states.animationOptions =
 # left side: custom logic save
 # -----------------------------	
 savedScroll = new ScrollComponent
-	width: sliderHolder.width
+	width: sliderCanvas.width
 	height: left.height * 0.22
 	midX: left.width/2, y: left.height + 75
 	borderRadius: 8
-	backgroundColor: white20
+	backgroundColor: black10
 	scrollHorizontal: false
+	superLayer: leftWrapper
 savedScroll.contentInset =
 	top: 20, bottom: 20
 
 savedScroll.content.backgroundColor = null
 # savedScroll.html = "No saved interactions yet!"
 # savedScroll.style = presetStyle
-# 
+
 savedScroll.states.add
-	active: y: sliderHolder.maxY * 1.05, opacity: 1
+	active: y: sliderCanvas.maxY + 48, opacity: 1
+
+
+# -----------------------------
+# left side: wrapper move-about
+# -----------------------------	
+leftWrapper.states.add
+	# spring curves and presets
+	spring: midY: sliderCanvas.midY
+	springSave: midY: sliderCanvas.midY + actionsHolder.height
+	springSaved: midY: sliderCanvas.midY - 24
+	
+# savedScroll.on Events.StateDidSwitch, ->
+# 	leftWrapper.states.switch("springSaved")
 
 
 # ------------------------------------------------------
@@ -757,6 +821,8 @@ for i in allSliders
 # save event
 # -----------------------------		
 allItems = []
+# logic taken from `tasks.framer`
+# http://share.framerjs.com/omr7won2119y/
 class Item extends Layer
 	constructor: (options={}) ->
 		options.superLayer ?= savedScroll.content
@@ -766,14 +832,9 @@ class Item extends Layer
 		options.height ?= 100
 		options.x ?= 20
 		options.y ?= 0
-		
 		options.style = itemStyle
-		
-		options.springCurve ?= springCurve
-			
+# 		options.springCurve ?= springCurve
 		super options
-		
-
 	
 save.on Events.TouchStart, ->
 	save.animate
@@ -784,8 +845,10 @@ save.on Events.TouchEnd, ->
 		properties: scale: 1
 		curve: "spring(400, 30, 0)"
 	
+	# Simon's advice for how to acvtually "save" the springCurve
 	# 1. save springCurve to an array
 	# 2. re-render ScrollComponent
+	
 	Utils.delay 0.25, ->
 		presets.snapToPage(custom)
 		# hide save/reset options	
@@ -802,9 +865,7 @@ save.on Events.TouchEnd, ->
 		
 		newItem = new Item	height: 0
 		newItem.index = -allItems.length + 3
-	# 	newItem.html = Utils.randomChoice(["Rando", "Miley", "Allen", "Beavis", "Oily"])
-		
-		
+
 		# Start displaying time
 		date = new Date()
 		h = date.getHours()
@@ -812,7 +873,12 @@ save.on Events.TouchEnd, ->
 		s = date.getSeconds()
 		# Set time
 		newItem.html = springCurve + " at " + h + ":" + m + ":" + s
-		
+		# I'd like the newItem.html to be a combination of words,
+		# e.g. for a fast velocity, heavy friction,
+		# and a lot of bounciness: 
+		# "dyno" + "ball" + "er" = "dynoballer"
+		# with enough randomness/range that the same combination
+		# isn't save more than once
 		newItem.animate
 			properties: height: 100
 			curve: "spring(400, 30, 0)"
@@ -872,5 +938,7 @@ right.on "change:currentPage", ->
 # ------------------------------------------------------
 # testing
 # ------------------------------------------------------
+# to test changes in springCurve over time:
 # Utils.interval 0.5, ->
 # 	print springCurve
+

@@ -27,6 +27,17 @@ exports.presetStyle =
 # 	"padding": "10pt 60pt"
 	"background-color": exports.black20
 
+exports.sliderStyle =
+	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+	"font-size": "18pt"
+	# "line-height": "100px"
+	# "text-align": "center"
+	"padding": "24px 0 0 36px"
+	"text-transform": "uppercase"
+	# "color": exports.black50
+	"color": exports.white50
+
+
 exports.itemStyle =
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
