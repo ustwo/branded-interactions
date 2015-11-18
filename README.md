@@ -9,7 +9,6 @@ Clients will be able to directly manipulate (using either physical - knobs, fade
 
 ![gif](img/branded-interactions.gif)
 
-***
 
 ## Current state
 The current version of the tool as been built in prototype form as a proof-of-concept, to validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) (internal .gdoc) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
@@ -33,7 +32,6 @@ You can preview by doing the same steps as above, except viewing in a WebKit bro
 
 ![insitu](img/insitu.jpg)
 
-***
 
 ## Future plans
 We'd like to facilitate workshops with clients that allow them explore and solidify directions to build upon in projects. These exercises will probably need to be prefaced with branded interactions in context, to help their understanding of the importance of such an exercise in the first place.
@@ -42,7 +40,6 @@ We'd like to facilitate workshops with clients that allow them explore and solid
 - Internal interviews with experienced workshop-facilitators. Some of these people include Jason, Yu Jin, Paul G
 - Experiment with physical interactions (LittleBits, etc)
 
-***
 
 ## To-do
 - [x] Isolated live-updating elements (position, rotation, etc)
