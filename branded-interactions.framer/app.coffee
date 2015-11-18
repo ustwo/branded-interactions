@@ -57,6 +57,7 @@ leftWrapper = new Layer
 	superLayer: left
 	size: left.size
 	backgroundColor: null
+	midY: (left.height / 2) + 48 + 18
 
 # -----------------------------
 # left side: slider setup
