@@ -811,11 +811,7 @@ save.on Events.TouchEnd, ->
 		m = date.getMinutes()
 		s = date.getSeconds()
 		# Set time
-	# 	newItem.html = h + ":" + m + ":" + s + " / " + springCurve
-		newItem.html = springCurve
-	
-	# 	print springCurve + " test"
-		
+		newItem.html = springCurve + " at " + h + ":" + m + ":" + s
 		
 		newItem.animate
 			properties: height: 100
