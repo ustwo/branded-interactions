@@ -1,5 +1,6 @@
 # Branded Interactions
 An internal prototyping tool that allows clients to build out visual cues for how their brand might play out as a series of screen-based interactions.
+![mov](img/branded-interactions.mov)
 
 ##### Why?
 To facilitate the building out the mood and tone of their brand on screen-based interactions, alongside other branding considerations.
@@ -10,7 +11,7 @@ Clients will be able to directly manipulate (using either physical - knobs, fade
 ***
 
 ### Current state
-The current version of the tool as been built in prototype form to *quickly* validate ideas [proposed by Joe](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
+The current version of the tool as been built in prototype form to *quickly* validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
 
 ##### Format
 The prototype has been designed for fullscreen, landscape iPad use, but built (mostly) responsively to allow for more devices/variations down the line.
@@ -21,7 +22,7 @@ You'll need an iPad and a Mac with [Framer Studio](http://framerjs.com), both ru
 1. Clone or download this project  
 2. Drag the whole `branded-interactions.framer` folder onto the [Framer Studio](http://framerjs.com) app icon  
 3. Download and open the [Frameless iPad app](https://itunes.apple.com/us/app/frameless-full-screen-web/id933580264?mt=8)  
-4. Make sure both the iPad and your Mac are running on the same network. Hit "Connect" to see the `branded-interactions.framer` prototype 
+4. Make sure both the iPad and your Mac are running on the same network. Hit "Connect" to see the `branded-interactions.framer` prototype
 5. You should see a list of  Framer projects open on the network. Tap `branded-interactions.framer`
 
 ![connect](img/connect1x.png) ![projects](img/projects1x.png)
