@@ -26,8 +26,6 @@ You'll need an iPad and a Mac with [Framer Studio](http://framerjs.com), both ru
 4. Make sure both the iPad and your Mac are running on the same network. Hit "Connect" to see the `branded-interactions.framer` prototype
 5. You should see a list of  Framer projects open on the network. Tap `branded-interactions.framer`
 
-![connect](img/connect1x.png) ![projects](img/projects1x.png)
-
 Also works with iOS Safari (with browser chrome, though).
 
 ##### How to preview
