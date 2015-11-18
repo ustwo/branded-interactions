@@ -10,7 +10,7 @@ Clients will be able to directly manipulate (using either physical - knobs, fade
 ***
 
 ### Current state
-The current version of the tool as been built in prototype form to validate ideas [proposed by Joe](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
+The current version of the tool as been built in prototype form to *quickly* validate ideas [proposed by Joe](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
 
 ***
 
