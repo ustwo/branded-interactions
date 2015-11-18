@@ -1,23 +1,23 @@
 # ustwo Branded Interactions
 An internal prototyping tool that allows clients to build out visual cues for how their brand might play out as a series of screen-based interactions.
 
-##### Why?
+#### Why?
 To facilitate the building out the mood and tone of their brand on screen-based interactions, alongside other branding considerations.
 
-##### How?
-Clients will be able to directly manipulate (using either physical - knobs, faders etc or digital controls - on screen spectrum tools) shapes, speeds, pace, lights of simple objects (and potentially save them out as gifs or videos but maybe not MVP).
+#### How?
+Clients will be able to directly manipulate (using either physical - knobs, faders etc or digital controls - on screen spectrum tools) shapes, speeds, pace, lights of simple objects (and potentially save them out as gifs or videos—but maybe not MVP).
 
-![mov](img/branded-interactions.gif)
+![gif](img/branded-interactions.gif)
 
 ***
 
-### Current state
+## Current state
 The current version of the tool as been built in prototype form as a proof-of-concept, to validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) (internal .gdoc) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
 
-##### Format
+#### Format
 The prototype has been designed for fullscreen, landscape iPad use, but built (mostly) responsively to allow for more devices/variations down the line.
 
-##### How to use
+#### How to use
 You'll need an iPad and a Mac with [Framer Studio](http://framerjs.com), both running on the same local network.
 
 1. Clone or download this project  
@@ -28,23 +28,23 @@ You'll need an iPad and a Mac with [Framer Studio](http://framerjs.com), both ru
 
 Also works with iOS Safari (with browser chrome, though).
 
-##### How to preview
+#### How to preview
 You can preview by doing the same steps as above, except viewing in a WebKit browser on your Mac. You can use [Framer Generator](https://github.com/koenbok/Framer) instead of Framer Studio.
 
 ![insitu](img/insitu.jpg)
 
 ***
 
-### Future plans
+## Future plans
 We'd like to facilitate workshops with clients that allow them explore and solidify directions to build upon in projects. These exercises will probably need to be prefaced with branded interactions in context, to help their understanding of the importance of such an exercise in the first place.
 
-##### Next steps
+#### Next steps
 - Internal interviews with experienced workshop-facilitators. Some of these people include Jason, Yu Jin, Paul G
 - Experiment with physical interactions (LittleBits, etc)
 
 ***
 
-### To-do
+## To-do
 - [x] Isolated live-updating elements (position, rotation, etc)
 - [x] Presets
 - [x] Live-updating sliders for spring values
