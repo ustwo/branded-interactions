@@ -9,29 +9,27 @@ Clients will be able to directly manipulate (using either physical - knobs, fade
 
 ![gif](img/branded-interactions.gif)
 
-
 ## Current state
-The current version of the tool as been built in prototype form as a proof-of-concept, to validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) (internal .gdoc) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
+The current version of the tool as been **built in prototype form as a proof-of-concept**, to validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) (internal .gdoc) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
 
 #### Format
 The prototype has been designed for fullscreen, landscape iPad use, but built (mostly) responsively to allow for more devices/variations down the line.
 
 #### How to use
-You'll need an iPad and a Mac with [Framer Studio](http://framerjs.com), both running on the same local network.
+You'll need a Mac with [Framer Studio](http://framerjs.com) and an iPad, both running on the same local network.
 
-1. Clone or download this project  
+1. On your Mac, clone or download this project  
 2. Drag the whole `branded-interactions.framer` folder onto the [Framer Studio](http://framerjs.com) app icon  
-3. Download and open the [Frameless iPad app](https://itunes.apple.com/us/app/frameless-full-screen-web/id933580264?mt=8)  
+3. On your iPad, download and open the [Frameless iOS app](https://itunes.apple.com/us/app/frameless-full-screen-web/id933580264?mt=8)  
 4. Make sure both the iPad and your Mac are running on the same network. Hit "Connect" to see the `branded-interactions.framer` prototype
 5. You should see a list of  Framer projects open on the network. Tap `branded-interactions.framer`
 
 Also works with iOS Safari (with browser chrome, though).
 
-#### How to preview
+#### How to preview only
 You can preview by doing the same steps as above, except viewing in a WebKit browser on your Mac. You can use [Framer Generator](https://github.com/koenbok/Framer) instead of Framer Studio.
 
 ![insitu](img/insitu.jpg)
-
 
 ## Future plans
 We'd like to facilitate workshops with clients that allow them explore and solidify directions to build upon in projects. These exercises will probably need to be prefaced with branded interactions in context, to help their understanding of the importance of such an exercise in the first place.
@@ -40,12 +38,12 @@ We'd like to facilitate workshops with clients that allow them explore and solid
 - Internal interviews with experienced workshop-facilitators. Some of these people include Jason, Yu Jin, Paul G
 - Experiment with physical interactions (LittleBits, etc)
 
-
 ## To-do
 - [x] Isolated live-updating elements (position, rotation, etc)
 - [x] Presets
 - [x] Live-updating sliders for spring values
-- [ ] Label sliders
+- [x] Label sliders
+- [ ] Add linear/ease sliders for some presets (instead of spring)
 - [ ] Context for slider changes (a visual point at the original setting for each)
 - [x] Update presets with useful values
 - [ ] Update and add in-device examples (menus etc)
