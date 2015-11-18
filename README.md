@@ -1,6 +1,6 @@
 # Branded Interactions
 An internal prototyping tool that allows clients to build out visual cues for how their brand might play out as a series of screen-based interactions.
-![mov](img/branded-interactions.mov)
+![mov](img/branded-interactions.gif)
 
 ##### Why?
 To facilitate the building out the mood and tone of their brand on screen-based interactions, alongside other branding considerations.
