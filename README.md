@@ -1,4 +1,4 @@
-# Branded Interactions
+# ustwo Branded Interactions
 An internal prototyping tool that allows clients to build out visual cues for how their brand might play out as a series of screen-based interactions.
 
 ##### Why?
@@ -12,7 +12,7 @@ Clients will be able to directly manipulate (using either physical - knobs, fade
 ***
 
 ### Current state
-The current version of the tool as been built in prototype form to *quickly* validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
+The current version of the tool as been built in prototype form as a proof-of-concept, to validate ideas [proposed by Joe Smith](https://docs.google.com/a/ustwo.com/document/d/19qUv0BSxZoihyoiLQi-Y1dvAGcc5_rFYiQIodabg58A/edit?usp=sharing) (internal .gdoc) over the New York 2015 summer. As a result, the tool is currently "dumb"—and the interactions defined within the tool must be manually logged or recorded for future use.
 
 ##### Format
 The prototype has been designed for fullscreen, landscape iPad use, but built (mostly) responsively to allow for more devices/variations down the line.
@@ -32,6 +32,8 @@ Also works with iOS Safari (with browser chrome, though).
 
 ##### How to preview
 You can preview by doing the same steps as above, except viewing in a WebKit browser on your Mac. You can use [Framer Generator](https://github.com/koenbok/Framer) instead of Framer Studio.
+
+![insitu](img/insitu.jpg)
 
 ***
 
