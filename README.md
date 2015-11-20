@@ -55,3 +55,4 @@ We'd like to facilitate workshops with clients that allow them explore and solid
 - [ ] Visualise (and live-update) spring/ease/linear graph (like the [Framer Learn](http://framerjs.com/learn/basics/animation/) examples, or [Simon's link](http://hosted.zeh.com.br/mctween/animationtypes.html))
 - [ ] Remove or modify 'reset' button on custom page/screen
 - [ ] Fix `savedScroll` bottom margin quirk
+- [x] Fullscreen browser/multiple pixel density support
