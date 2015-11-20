@@ -6,9 +6,23 @@
 # ------------------------------------------------------
 # overall setup
 # ------------------------------------------------------
-# document.body.style.cursor = "auto"
+document.body.style.cursor = "auto"
 
 # modules
+
+# http://jrdn.io/d5or
+{DPR} = require "DevicePixelRatio"
+# Store our base unit
+unit = 1
+unit = DPR.get(unit)
+# print unit
+
+# 2 = iOS (iPad etc)
+if unit is 2
+	Framer.Device.contentScale = 1
+# 1 = MacBook (inc Retina display)
+else if unit is 1
+	Framer.Device.contentScale = 0.5
 
 # bg colour switcher, and associated variables
 module = require "colourTransition"
@@ -57,7 +71,7 @@ leftWrapper = new Layer
 	superLayer: left
 	size: left.size
 	backgroundColor: null
-	midY: (left.height / 2) + 48 + 18
+# 	midY: (left.height / 2) + 48 + 18
 
 # -----------------------------
 # left side: slider setup
@@ -618,8 +632,8 @@ iphone = new Layer
 	superLayer: rightTwo
 
 iphoneCanvas = new Layer
-	width: right.width * 0.41
-	height: right.height * 0.49
+	width: iphone.width * 0.42
+	height: iphone.height * 0.37
 	backgroundColor: null
 	superLayer: rightTwo
 	clip: true
@@ -683,8 +697,8 @@ appleWatch = new Layer
 	superLayer: rightThree
 	
 watchCanvas = new Layer
-	width: right.width * 0.23
-	height: right.height * 0.19
+	width: appleWatch.width * 0.4
+	height: appleWatch.height * 0.29
 	backgroundColor: null
 	superLayer: rightThree
 	clip: true
