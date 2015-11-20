@@ -12,7 +12,7 @@ exports.transparent = "rgba(0, 0, 0, 0)"
 exports.squareStyle =
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
-	"line-height": "600px"
+	# "line-height": "80%"
 	"text-align": "center"
 	"text-transform": "uppercase"
 	"color": exports.black50
@@ -51,14 +51,14 @@ exports.resetStyle =
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
 	"line-height": "150px"
-	"padding-left": "116px"
+	"padding-left": "17%"
 	"text-transform": "uppercase"
 
 exports.saveStyle =
 	"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
 	"font-size": "18pt"
 	"line-height": "150px"
-	"padding-left": "218px"
+	"padding-left": "30%"
 	"text-transform": "uppercase"
 
 exports.savedStyle =

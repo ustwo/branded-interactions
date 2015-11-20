@@ -8,6 +8,9 @@
 # ------------------------------------------------------
 document.body.style.cursor = "auto"
 
+window.onresize = ->
+	location.reload()
+
 # modules
 
 # http://jrdn.io/d5or
@@ -345,7 +348,8 @@ reset = new Layer
 	
 resetImg = new Layer
 	superLayer: reset
-	midY: reset.height/2, x: 48
+# 	x: 48
+	x: reset.width/5, midY: reset.height/2
 	width: 48, height: 43
 	image: "images/reset.png"
 
@@ -359,7 +363,7 @@ save = new Layer
 	
 saveImg = new Layer
 	superLayer: save
-	midY: save.height/2, x: 150
+	x: save.width/3, midY: save.height/2
 	width: 48, height: 43
 	image: "images/save.png"
 	
@@ -523,7 +527,6 @@ cols = 2
 			backgroundColor: white20
 			borderRadius: 12
 			clip: false
-			style: squareStyle
 			superLayer: squareCanvas
 		# push to array set up above
 		interactions.push(i)
@@ -531,19 +534,33 @@ cols = 2
 # rename these layers to make them handy
 scale = interactions[0]
 scale.name = "scale"
-scale.html = scale.name
 
 rotate = interactions[1]
 rotate.name = "rotate"
-rotate.html = rotate.name
 
 position = interactions[2]
 position.name = "position"
-position.html = position.name
 
 opacity = interactions[3]
 opacity.name = "opacity"
-opacity.html = opacity.name
+
+captions = []
+for i in interactions
+	caption = new Layer
+		superLayer: i
+		style: squareStyle
+		width: i.width, height: i.height * 0.1
+		clip: false, backgroundColor: null
+		maxY: i.height * 0.95
+		
+	captions.push(caption)
+	
+captions[0].html = interactions[0].name
+captions[1].html = interactions[1].name
+captions[2].html = interactions[2].name
+captions[3].html = interactions[3].name
+
+
 
 interactionsTargets = []
 
