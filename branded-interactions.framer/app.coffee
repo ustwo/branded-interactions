@@ -1,6 +1,6 @@
 # <@>
 # Danny White
-# NYC / 2015
+# NYC / 2015-16
 # https://github.com/ustwo/branded-interactions
 
 # ------------------------------------------------------
@@ -26,11 +26,6 @@ if unit is 2
 # 1 = MacBook (inc Retina display)
 else if unit is 1
 	Framer.Device.contentScale = 0.5
-
-# bg colour switcher, and associated variables
-module = require "colourTransition"
-bgSpeed = 0.2
-bgFR = 60 # frame rate
 
 # specific ustwo colours
 ustwoColours = require "ustwoColours"
@@ -783,7 +778,7 @@ pushStates = ->
 # function for updating springCurve
 updateCurve = (preset) ->
 # 	update background colour
-	module.colourTransition(left, preset.fill, bgSpeed, bgFR)
+	left.animate properties: backgroundColor: preset.fill
 # 	change values accordingly (to preset)
 	tension.animate properties: value: preset.tension
 	friction.animate properties: value: preset.friction
@@ -812,7 +807,7 @@ updateAllCurves = ->
 		updateCurve(blitz)
 	else if presets.currentPage is custom
 		# update background color
-		module.colourTransition(left, custom.fill, bgSpeed, bgFR)
+		left.animate properties: backgroundColor: custom.fill
 		# show saved custom curves
 		savedScroll.states.switch("active")
 		# hide reset/save buttons
