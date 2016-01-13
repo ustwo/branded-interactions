@@ -1,6 +1,6 @@
 # <@>
 # Danny White
-# ustwo / NYC / 2015-16
+# ustwo NYC / 2015-16
 # https://github.com/ustwo/ustwo-colours
 
 # How to use this:

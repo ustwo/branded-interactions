@@ -1,6 +1,6 @@
 # <@>
 # Danny White
-# NYC / 2015-16
+# ustwo NYC / 2015-16
 # https://github.com/ustwo/branded-interactions
 
 # ------------------------------------------------------
