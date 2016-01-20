@@ -16,7 +16,9 @@ The current version of the tool as been **built in prototype form as a proof-of-
 The prototype has been designed for fullscreen, landscape iPad use, but built (mostly) responsively to allow for more devices/variations down the line.
 
 #### How to use
-You'll need a Mac with [Framer Studio](http://framerjs.com) and an iPad, both running on the same local network.
+A stable public version is available at [bi.ustwo.com](http://bi.ustwo.com).
+
+To run the most recent version (this repository), you'll need a Mac with [Framer Studio](http://framerjs.com) and an iPad. These need to be running on the same local network.
 
 1. On your Mac, clone or download this project  
 2. Drag the whole `branded-interactions.framer` folder onto the [Framer Studio](http://framerjs.com) app icon  
@@ -35,10 +37,11 @@ You can preview by doing the same steps as above, except viewing in a WebKit bro
 We'd like to facilitate workshops with clients that allow them explore and solidify directions to build upon in projects. These exercises will probably need to be prefaced with branded interactions in context, to help their understanding of the importance of such an exercise in the first place.
 
 #### Next steps
-- Internal interviews with experienced workshop-facilitators. Some of these people include Jason, Yu Jin, Paul G
+- Internal interviews with experienced workshop-facilitators (Jason, Yu Jin, Chris M)
 - Experiment with physical interactions (LittleBits, etc)
 
 ## To-do
+- [ ] Link this repository to [bi.ustwo.com](http://bi.ustwo.com) for auto-push
 - [x] Isolated live-updating elements (position, rotation, etc)
 - [x] Presets
 - [x] Live-updating sliders for spring values
