@@ -10,7 +10,8 @@
   "updateDelay" : 0.3,
   "deviceScale" : 1,
   "foldedCodeRanges" : [
-
+    "{0, 161}",
+    "{268, 375}"
   ],
   "orientation" : 0,
   "projectId" : "7BF06DD0-86F5-4630-B557-E4138A46E9F9"
