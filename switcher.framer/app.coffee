@@ -57,7 +57,8 @@ allToggles = []
 for toggle in [1..3]
 	toggle = new Layer
 		width: 150, height: 50
-		x: toggle*150, y: 0
+		x: toggle*160, y: 0
+		backgroundColor: "grey"
 	allToggles.push(toggle)
 
 	toggle.onTapStart ->
