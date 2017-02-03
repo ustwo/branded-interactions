@@ -16,10 +16,10 @@ slow =
 slow.curve = ("spring(#{slow.tension}, #{slow.friction}, #{slow.velocity})")
 
 ease =
-	tension: null
-	friction: null
-	velocity: null
-	time: 0.25
+# 	tension: null
+# 	friction: null
+# 	velocity: null
+	time: 0.1
 	delay: 0
 ease.curve = ("ease")
 
@@ -29,7 +29,7 @@ customAnimation =
 	time: ease.time
 	delay: ease.delay
 
-# Target layer
+# Set up target layer
 target = new Layer
 target.center()
 
@@ -38,17 +38,20 @@ target.states =
 	two: scale: 1.5
 target.animationOptions = customAnimation
 
+# A function to refresh the animation values when presets are tapped
 updateAnimation = (newAnimation) ->
 	customAnimation =
-		curve: "spring(#{newAnimation.tension}, #{newAnimation.velocity}, #{newAnimation.friction})"
+# 		curve: "spring(#{newAnimation.tension}, #{newAnimation.velocity}, #{newAnimation.friction})"
+		curve: newAnimation.curve
 		time: newAnimation.time
 		delay: newAnimation.delay
 	# List all affected animations
 	target.animationOptions = customAnimation
 	print customAnimation
 
-# Switch states on click
+# Switch target layer states on click
 target.onTap ->
+	# Re-apply latest customAnimation
 	this.animationOptions = customAnimation
 	print target.animationOptions
 	this.stateCycle("one", "two")
