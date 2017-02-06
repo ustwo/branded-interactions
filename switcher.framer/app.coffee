@@ -9,25 +9,30 @@ snappy.curve = ("spring(#{snappy.tension}, #{snappy.friction}, #{snappy.velocity
 	
 slow =
 	tension: 200
-	friction: 2
-	velocity: 100
-	time: null
-	delay: null
+	friction: 100
+	velocity: 2
+	time: 0
+	delay: 0
 slow.curve = ("spring(#{slow.tension}, #{slow.friction}, #{slow.velocity})")
 
 ease =
-# 	tension: null
-# 	friction: null
-# 	velocity: null
-	time: 0.1
-	delay: 0
+	tension: 0
+	friction: 0
+	velocity: 0
+	time: 0.25
+	delay: 0.2
 ease.curve = ("ease")
 
 # Default to ease
 customAnimation =
+	tension: ease.tension
+	friction: ease.friction
+	velocity: ease.velocity
 	curve: ease.curve
 	time: ease.time
 	delay: ease.delay
+
+currentPreset = "Yo"
 
 # Set up target layer
 target = new Layer
@@ -38,22 +43,90 @@ target.states =
 	two: scale: 1.5
 target.animationOptions = customAnimation
 
+# HTML for target
+targetText = new Layer
+	html: "#{currentPreset}"
+	parent: target
+	backgroundColor: null
+	style:
+		"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+		"color": "white"
+		"font-size": "0.5em"
+		"text-align": "center"
+		"padding-top": "80px"
+
+	
+# Slider setup
+tensionSlider = new SliderComponent
+	midY: Screen.height/2 - 400
+	min: 0, max: 800, value: customAnimation.tension
+	name: "Tension"
+frictionSlider = new SliderComponent
+	midY: Screen.height/2 - 350
+	min: 0, max: 100, value: customAnimation.friction
+	name: "Friction"
+velocitySlider = new SliderComponent
+	midY: Screen.height/2 - 300
+	min: 0, max: 25, value: customAnimation.velocity
+	name: "Velocity"
+	
+timeSlider = new SliderComponent
+	midY: Screen.height/2 - 250
+	min: 0, max: 2, value: customAnimation.time
+	name: "Time"
+delaySlider = new SliderComponent
+	midY: Screen.height/2 - 200
+	min: 0, max: 0.5, value: customAnimation.delay
+	name: "Delay"
+	
+allSliders = [tensionSlider, frictionSlider, velocitySlider, timeSlider, delaySlider]
+
+for slider in allSliders
+# 	slider.parent = left
+	slider.midX = Screen.width/2
+	slider.knob.draggable.momentum = false
+	slider.html = "#{slider.name} is #{slider.value} old"
+	slider.style = 
+		"font-family": "Px Grotesk, -apple-system,  Helvetica Neue"
+		"color": "black"
+		"padding-top": "10px"
+		"font-size": "0.5em"
+		
+	slider.onValueChange ->
+		print "#{this.name} is " + this.value
+		this.html = "#{this.name} is #{this.value}"
+
 # A function to refresh the animation values when presets are tapped
 updateAnimation = (newAnimation) ->
+# 	currentPreset = newAnimation
 	customAnimation =
-# 		curve: "spring(#{newAnimation.tension}, #{newAnimation.velocity}, #{newAnimation.friction})"
+# 		curve: "spring(#{newAnimation.tension}, #{newAnimation.friction}, #{newAnimation.velocity})"
+		tension: newAnimation.tension
+		friction: newAnimation.friction
+		velocity: newAnimation.velocity
+		
 		curve: newAnimation.curve
 		time: newAnimation.time
 		delay: newAnimation.delay
 	# List all affected animations
 	target.animationOptions = customAnimation
-	print customAnimation
+# 	print customAnimation
 
+	# Update sliders
+	tensionSlider.animateToValue(newAnimation.tension)
+	frictionSlider.animateToValue(newAnimation.friction)
+	velocitySlider.animateToValue(newAnimation.velocity)
+	timeSlider.animateToValue(newAnimation.time)
+	delaySlider.animateToValue(newAnimation.delay)
+
+
+	
 # Switch target layer states on click
 target.onTap ->
 	# Re-apply latest customAnimation
 	this.animationOptions = customAnimation
-	print target.animationOptions
+# 	print target.animationOptions
+# 	tensionSlider.animateToValue(100)
 	this.stateCycle("one", "two")
 
 allToggles = []
@@ -66,6 +139,7 @@ for toggle in [1..3]
 
 	toggle.onTapStart ->
 		this.backgroundColor = "black"
+		
 	toggle.onTapEnd ->
 		this.backgroundColor = "grey"
 		
@@ -75,7 +149,9 @@ allToggles[2].html = "Ease"
 
 allToggles[0].onTap ->
 	updateAnimation(snappy)
+	
 allToggles[1].onTap ->
 	updateAnimation(slow)
+	
 allToggles[2].onTap ->
 	updateAnimation(ease)
