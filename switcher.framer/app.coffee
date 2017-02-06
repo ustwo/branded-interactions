@@ -55,6 +55,28 @@ targetText = new Layer
 		"text-align": "center"
 		"padding-top": "80px"
 
+# A function to refresh the animation values when presets are tapped
+updateAnimation = (newAnimation) ->
+# 	currentPreset = newAnimation
+	customAnimation =
+# 		curve: "spring(#{newAnimation.tension}, #{newAnimation.friction}, #{newAnimation.velocity})"
+		tension: newAnimation.tension
+		friction: newAnimation.friction
+		velocity: newAnimation.velocity
+		
+		curve: newAnimation.curve
+		time: newAnimation.time
+		delay: newAnimation.delay
+	# List all affected animations
+	target.animationOptions = customAnimation
+
+# Update sliders
+updateSliders = (newAnimation) ->
+	tensionSlider.animateToValue(newAnimation.tension)
+	frictionSlider.animateToValue(newAnimation.friction)
+	velocitySlider.animateToValue(newAnimation.velocity)
+	timeSlider.animateToValue(newAnimation.time)
+	delaySlider.animateToValue(newAnimation.delay)
 	
 # Slider setup
 tensionSlider = new SliderComponent
@@ -80,6 +102,8 @@ delaySlider = new SliderComponent
 	name: "Delay"
 	
 allSliders = [tensionSlider, frictionSlider, velocitySlider, timeSlider, delaySlider]
+springSliders = [tensionSlider, frictionSlider, velocitySlider]
+linearSliders = [timeSlider]
 
 for slider in allSliders
 # 	slider.parent = left
@@ -93,31 +117,38 @@ for slider in allSliders
 		"font-size": "0.5em"
 		
 	slider.onValueChange ->
-		print "#{this.name} is " + this.value
+		print "Tension: #{customAnimation.tension}, Friction: #{customAnimation.friction}, Velocity: #{customAnimation.velocity}, Time: #{customAnimation.time}, Delay: #{customAnimation.delay}, Curve: #{customAnimation.curve}"
 		this.html = "#{this.name} is #{this.value}"
-
-# A function to refresh the animation values when presets are tapped
-updateAnimation = (newAnimation) ->
-# 	currentPreset = newAnimation
-	customAnimation =
-# 		curve: "spring(#{newAnimation.tension}, #{newAnimation.friction}, #{newAnimation.velocity})"
-		tension: newAnimation.tension
-		friction: newAnimation.friction
-		velocity: newAnimation.velocity
 		
-		curve: newAnimation.curve
-		time: newAnimation.time
-		delay: newAnimation.delay
-	# List all affected animations
-	target.animationOptions = customAnimation
-# 	print customAnimation
+		customAnimation.tension = tensionSlider.value
+		customAnimation.friction = frictionSlider.value
+		customAnimation.velocity = velocitySlider.value
+		customAnimation.curve = "spring(#{tensionSlider.value}, #{frictionSlider.value}, #{velocitySlider.value})"
+		
+dimSliders = (sliderGroup) ->
+	for slider in sliderGroup
+		slider.opacity = 0.5		
+		
+for slider in linearSliders		
+	slider.onValueChange ->
+		dimSliders(springSliders)
+		# UP TO HERE
+for slider in springSliders
+	slider.onValueChange ->
+		print "spring sliders"
+	# If the slider changed is timeSlider or delaySlider, dim the spring sliders
+		# Visa versa
+		
+		
+# 		print customAnimation
+# 		updateAnimation(customAnimation)
+# 		print customAnimation
+		
+# tensionSlider.onValueChange ->
+# 	customAnimation.tension = this.value
+# 	customAnimation.curve = "spring(#{tensionSlider.value}, #{frictionSlider.value}, #{velocitySlider.value})"
 
-	# Update sliders
-	tensionSlider.animateToValue(newAnimation.tension)
-	frictionSlider.animateToValue(newAnimation.friction)
-	velocitySlider.animateToValue(newAnimation.velocity)
-	timeSlider.animateToValue(newAnimation.time)
-	delaySlider.animateToValue(newAnimation.delay)
+
 
 
 	
@@ -125,7 +156,7 @@ updateAnimation = (newAnimation) ->
 target.onTap ->
 	# Re-apply latest customAnimation
 	this.animationOptions = customAnimation
-# 	print target.animationOptions
+	print target.animationOptions
 # 	tensionSlider.animateToValue(100)
 	this.stateCycle("one", "two")
 
@@ -149,9 +180,12 @@ allToggles[2].html = "Ease"
 
 allToggles[0].onTap ->
 	updateAnimation(snappy)
+	updateSliders(snappy)
 	
 allToggles[1].onTap ->
 	updateAnimation(slow)
+	updateSliders(slow)
 	
 allToggles[2].onTap ->
 	updateAnimation(ease)
+	updateSliders(ease)
